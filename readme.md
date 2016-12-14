@@ -13,7 +13,7 @@
 - `卷积核`（Convolution Kernel），也叫`过滤器filter`，由对应的权值`W`和偏置`b`体现
 - 下图是`3x3`的卷积核在`5x5`的图像上做卷积的过程，就是矩阵做**点乘**之后的和
 ![enter description here][1]   
-![$${W_{\rm{i}}}{x_{small}} + {b_i}$$](http://latex.codecogs.com/png.latex?%5Cdpi%7B120%7D%20%5Clarge%20%24%24%7BW_%7B%5Crm%7Bi%7D%7D%7D%7Bx_%7Bsmall%7D%7D%20&plus;%20%7Bb_i%7D%24%24)
+第`i`个隐含单元的输入就是：![$${W_{\rm{i}}}{x_{small}} + {b_i}$$](http://latex.codecogs.com/png.latex?%5Cdpi%7B120%7D%20%5Clarge%20%24%24%7BW_%7B%5Crm%7Bi%7D%7D%7D%7Bx_%7Bsmall%7D%7D%20&plus;%20%7Bb_i%7D%24%24)，其中![$${x_{small}}$$](http://latex.codecogs.com/png.latex?%5Cdpi%7B120%7D%20%5Clarge%20$${x_{small}}$$)
 
 
 
