@@ -1,7 +1,7 @@
 深度学习 Deep Learning
 ==============
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
-- 有关神经网络的部分可以查看这里的`BP神经网络`的部分：[https://github.com/lawlite19/MachineLearning_Python](https://github.com/lawlite19/MachineLearning_Python)
+- 有关神经网络的部分可以查看[这里](https://github.com/lawlite19/MachineLearning_Python)的`BP神经网络`的部分：[https://github.com/lawlite19/MachineLearning_Python](https://github.com/lawlite19/MachineLearning_Python)
 
 ## 一、CNN卷积神经网络
 ### 1、概述
@@ -16,7 +16,7 @@
 ```mathjax!
 \[{W_{\rm{i}}}{x_{small}} + {b_i}\]
 ```
-```mathjax!
+```
 $$x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}$$
 \\(x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}\\)
 ```
