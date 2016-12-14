@@ -21,8 +21,8 @@
 
 - 多个过滤器`filter`（卷积核）
 - 例子
-
-
+![enter description here][2]
 
 
   [1]: ./images/CNN_01.gif "CNN_01.gif"
+  [2]: ./images/CNN_02.gif "CNN_02.gif"
