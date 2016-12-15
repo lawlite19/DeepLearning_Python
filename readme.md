@@ -71,13 +71,13 @@
 ### 6、CNN是如何工作的
 - 看到知乎上的一个回答还不错：https://www.zhihu.com/question/52668301
 - 每个过滤器可以被看成是特征标识符`（ feature identifiers）`
-- 如下图一个曲线检测器对应的值
+- 如下图一个曲线检测器对应的值     
 ![enter description here][12]
-- 我们有一张图片，当过滤器移动到左上角时，进行**卷积运算**
+- 我们有一张图片，当过滤器移动到左上角时，进行**卷积运算**     
 ![enter description here][13]
 - 当与我们的过滤器的形状很相似时，得到的值会很大
-![enter description here][14]
-- 若是滑动到其他的部分，可以看出很不一样，对应的值就会很小，然后进行激活层的映射。
+![enter description here][14]     
+- 若是滑动到其他的部分，可以看出很不一样，对应的值就会很小，然后进行激活层的映射。     
 ![enter description here][15]
 - 过滤器`filter`的值怎么求到，就是我们通过`BP`训练得到的。
 
