@@ -46,10 +46,10 @@
  - `Pooling`就有平移不变性（(translation invariant）
  如图`feature map`是`12x12`大小的图片，Pooling区域为6x6,所以池化后得到的`feature map`为`2x2`,假设白色像素值为1，灰色像素值为0，若采用`max pooling`之后，左上角窗口值为**1**
  ![enter description here][6]      
- 将图像右移一个像素，左上角窗口值仍然为**1**
+ 将图像右移一个像素，左上角窗口值仍然为**1**     
  ![enter description here][7]     
- 将图像缩放之后，左上角窗口值仍然为**1**
- ![enter description here][8]
+ 将图像缩放之后，左上角窗口值仍然为**1**     
+ ![enter description here][8]    
 - `Pooling`的方法中`average`方法对背景保留更好，`max`对纹理提取更好
 
 
