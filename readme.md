@@ -51,6 +51,35 @@
  将图像缩放之后，左上角窗口值仍然为**1**     
  ![enter description here][8]    
 - `Pooling`的方法中`average`方法对背景保留更好，`max`对纹理提取更好
+- 深度学习可以进行多次卷积、池化操作
+
+### 4、激活层
+- 在每次卷积操作之后一般都会经过一个**非线性层**，也是**激活层**
+- 现在一般选择是`ReLu`,层次越深，相对于其他的函数效果较好，还有`Sigmod,tanh`函数等
+![enter description here][9]
+- `sigmod`和`tanh`都存在**饱和**的问题，如上图所示，当x轴上的值较大时，对应的梯度几乎为0，若是利用**BP反向传播**算法， 可能造成梯度消失的情况，也就学不到东西了
+
+### 5、全连接层 Fully connected layer
+- 将多次卷积和池化后的图像展开进行全连接，如下图所示。
+![enter description here][10]
+- 接下来就可以通过**BP反向传播**进行训练了
+- 所以总结起来，结构可以是这样的
+![enter description here][11]
+
+-------------------
+
+### 6、CNN是如何工作的
+- 看到知乎上的一个回答还不错：https://www.zhihu.com/question/52668301
+- 每个过滤器可以被看成是特征标识符`（ feature identifiers）`
+- 如下图一个曲线检测器对应的值
+![enter description here][12]
+- 我们有一张图片，当过滤器移动到左上角时，进行**卷积运算**
+![enter description here][13]
+- 当与我们的过滤器的形状很相似时，得到的值会很大
+![enter description here][14]
+- 若是滑动到其他的部分，可以看出很不一样，对应的值就会很小，然后进行激活层的映射。
+![enter description here][15]
+- 过滤器`filter`的值怎么求到，就是我们通过`BP`训练得到的。
 
 
   [1]: ./images/CNN_01.gif "CNN_01.gif"
@@ -61,3 +90,10 @@
   [6]: ./images/CNN_06.png "CNN_06.png"
   [7]: ./images/CNN_07.png "CNN_07.png"
   [8]: ./images/CNN_08.png "CNN_08.png"
+  [9]: ./images/CNN_10.png "CNN_10.png"
+  [10]: ./images/CNN_09.png "CNN_09.png"
+  [11]: ./images/CNN_11.png "CNN_11.png"
+  [12]: ./images/CNN_12.png "CNN_12.png"
+  [13]: ./images/CNN_13.png "CNN_13.png"
+  [14]: ./images/CNN_15.png "CNN_15.png"
+  [15]: ./images/CNN_14.png "CNN_14.png"
