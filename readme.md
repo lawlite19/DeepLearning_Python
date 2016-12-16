@@ -83,6 +83,13 @@
 - 过滤器`filter`的值怎么求到，就是我们通过`BP`训练得到的。
 
 
+--------------------
+
+### 7、CNN的Tensorflow实现
+- 代码和说明放到了另外一个`Tensorflow`学习的仓库里了
+- [全部代码](https://github.com/lawlite19/MachineLearning_TensorFlow/blob/master/Mnist_03_CNN/mnist_cnn.py)：https://github.com/lawlite19/MachineLearning_TensorFlow/blob/master/Mnist_03_CNN/mnist_cnn.py
+- 说明部分（第七部分）：https://github.com/lawlite19/MachineLearning_TensorFlow
+
   [1]: ./images/CNN_01.gif "CNN_01.gif"
   [2]: ./images/CNN_02.gif "CNN_02.gif"
   [3]: ./images/CNN_03.png "CNN_03.png"
