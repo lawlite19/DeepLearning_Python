@@ -93,14 +93,23 @@
 --------------------------------
 
 ### 8、CNN公式推导
-- 1）说明
- - 参考论文：http://cogprints.org/5869/1/cnn_tutorial.pdf
- - 或者在这里查看：https://github.com/lawlite19/MachineLearning_TensorFlow/tree/master/paper/cnn_tutorial.pdf
- - **BP神经网络**之前写过推导，可以查看这里的第三部分BP神经网络：https://github.com/lawlite19/MachineLearning_Python
- - 我们假设CNN中每个**卷积层**下面都跟着一个**Pooling池化层**（下采样层）
-- 2）卷积层
+#### （1）说明
+- 参考论文：http://cogprints.org/5869/1/cnn_tutorial.pdf
+- 或者在这里查看：https://github.com/lawlite19/MachineLearning_TensorFlow/tree/master/paper/cnn_tutorial.pdf
+- **BP神经网络**之前写过推导，可以查看这里的第三部分BP神经网络：https://github.com/lawlite19/MachineLearning_Python
+- 我们假设CNN中每个**卷积层**下面都跟着一个**Pooling池化层**（下采样层）
+- 文章的理解可能会有问题
+#### （2）符号说明
+- `l`..................当前层
+- ![$${{M_j}}$$](http://latex.codecogs.com/png.latex?%5Cdpi%7B120%7D%20%5Clarge%20$${{M_j}}$$)..................输入maps的集合
 
+#### （3）卷积层
+- 1）卷积层计算公式
+ - ![$${\rm{x}}_j^l = f(\sum\limits_{i \in {M_j}} {{\rm{x}}_i^{l - 1}*k_{ij}^l + b_j^l} )$$](http://latex.codecogs.com/png.latex?%5Cdpi%7B120%7D%20%5Clarge%20$${\rm{x}}_j^l = f(\sum\limits_{i \in {M_j}} {{\rm{x}}_i^{l - 1}*k_{ij}^l + b_j^l} )$$)
+ - ![$${\rm{x}}_j^l$$](http://latex.codecogs.com/png.latex?%5Cdpi%7B120%7D%20%5Clarge%20$${\rm{x}}_j^l$$) 表示第`l`层的第`j`个`feature map`（**特征图**）
 
+- 2）卷积层梯度计算
+ - 
 
   [1]: ./images/CNN_01.gif "CNN_01.gif"
   [2]: ./images/CNN_02.gif "CNN_02.gif"
