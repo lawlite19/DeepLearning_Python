@@ -99,15 +99,17 @@
 - **BP神经网络**之前写过推导，可以查看这里的第三部分BP神经网络：https://github.com/lawlite19/MachineLearning_Python
 - 我们假设CNN中每个**卷积层**下面都跟着一个**Pooling池化层**（下采样层）
 - 文章的理解可能会有问题
+
 #### （2）符号说明
 - `l`..................当前层
 - ![$${{M_j}}$$](http://latex.codecogs.com/png.latex?%5Cdpi%7B120%7D%20%5Clarge%20$${{M_j}}$$)..................输入maps的集合
+
 
 #### （3）卷积层
 - 1）卷积层计算公式
  - ![$${\rm{x}}_j^l = f(\sum\limits_{i \in {M_j}} {{\rm{x}}_i^{l - 1}*k_{ij}^l + b_j^l} )$$](http://latex.codecogs.com/png.latex?%5Cdpi%7B120%7D%20%5Clarge%20$${\rm{x}}_j^l%20=%20f(\sum\limits_{i%20\in%20{M_j}}%20{{\rm{x}}_i^{l%20-%201}*k_{ij}^l%20+%20b_j^l}%20)$$)
  - ![$${\rm{x}}_j^l$$](http://latex.codecogs.com/png.latex?%5Cdpi%7B120%7D%20%5Clarge%20$${\rm{x}}_j^l$$) 表示第`l`层的第`j`个`feature map`（**特征图**）
- - 
+ - 可以对照到上面**多个卷积核**的例子看
 
 - 2）卷积层梯度计算
  - 
