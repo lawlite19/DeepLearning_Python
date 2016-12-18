@@ -108,7 +108,7 @@
 
 #### （3）卷积层
 - 1）卷积层计算公式
- - ![$${\rm{x}}_j^l = f(\sum\limits_{i \in {M_j}} {{\rm{x}}_i^{l - 1}*k_{ij}^l + b_j^l} )$$](http://latex.codecogs.com/png.latex?%5Cdpi%7B120%7D%20%5Clarge%20$${\rm{x}}_j^l%20=%20f(\sum\limits_{i%20\in%20{M_j}}%20{{\rm{x}}_i^{l%20-%201}*k_{ij}^l%20+%20b_j^l}%20)$$)
+ - test![$${\rm{x}}_j^l = f(\sum\limits_{i \in {M_j}} {{\rm{x}}_i^{l - 1}*k_{ij}^l + b_j^l} )$$](http://latex.codecogs.com/png.latex?%5Cdpi%7B120%7D%20%5Clarge%20$${\rm{x}}_j^l%20=%20f(\sum\limits_{i%20\in%20{M_j}}%20{{\rm{x}}_i^{l%20-%201}*k_{ij}^l%20+%20b_j^l}%20)$$)
  - ![$${\rm{x}}_j^l$$](http://latex.codecogs.com/png.latex?%5Cdpi%7B120%7D%20%5Clarge%20$${\rm{x}}_j^l$$) 表示第`l`层的第`j`个`feature map`（**特征图**）
  - 可以对照到上面**多个卷积核**的例子看
  - `j`相当于是第几个卷积核
@@ -120,6 +120,14 @@
  - 当前层的第`j`个unit的灵敏度![$$\delta _{\rm{j}}^l$$](http://latex.codecogs.com/png.latex?%5Cdpi%7B120%7D%20%5Clarge%20$$\delta%20_{\rm{j}}^l$$)结果就是：先对下一层的节点（连接到当前层`l`的感兴趣节点的第`l+1`层的节点）的灵敏度求和（得到![$$\delta _{\rm{j}}^{l + 1}$$](http://latex.codecogs.com/png.latex?%5Cdpi%7B120%7D%20%5Clarge%20$$\delta%20_{\rm{j}}^{l%20+%201}$$)），然后乘以这些连接对应的权值（连接第`l`层感兴趣节点和第`l+1`层节点的权值）`W`。再乘以当前层`l`的该神经元节点的输入`u`的激活函数**f的导数值**
  - ![$$\delta _{\rm{j}}^l = \beta _j^{l + 1}({f^'}(u_j^l) \circ up(\delta _{\rm{j}}^{l + 1}))$$](http://latex.codecogs.com/png.latex?%5Cdpi%7B120%7D%20%5Clarge%20$$\delta%20_{\rm{j}}^l%20=%20\beta%20_j^{l%20+%201}({f^%27}(u_j^l)%20\circ%20up(\delta%20_{\rm{j}}^{l%20+%201}))$$)
  - `up`表示**上采样**操作，因为我们之前假设每个卷积层之后跟着一个Pooling层，所以反向传播需要进行上采样
+
+
+
+
+
+
+
+
 
   [1]: ./images/CNN_01.gif "CNN_01.gif"
   [2]: ./images/CNN_02.gif "CNN_02.gif"
