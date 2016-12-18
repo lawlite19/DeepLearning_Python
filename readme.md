@@ -90,6 +90,18 @@
 - [全部代码](https://github.com/lawlite19/MachineLearning_TensorFlow/blob/master/Mnist_03_CNN/mnist_cnn.py)：https://github.com/lawlite19/MachineLearning_TensorFlow/blob/master/Mnist_03_CNN/mnist_cnn.py
 - 说明部分（第七部分）：https://github.com/lawlite19/MachineLearning_TensorFlow
 
+--------------------------------
+
+### 8、CNN公式推导
+- 1）说明
+ - 参考论文：http://cogprints.org/5869/1/cnn_tutorial.pdf
+ - 或者在这里查看：https://github.com/lawlite19/MachineLearning_TensorFlow/tree/master/paper/cnn_tutorial.pdf
+ - **BP神经网络**之前写过推导，可以查看这里的第三部分BP神经网络：https://github.com/lawlite19/MachineLearning_Python
+ - 我们假设CNN中每个**卷积层**下面都跟着一个**Pooling池化层**（下采样层）
+- 2）卷积层
+
+
+
   [1]: ./images/CNN_01.gif "CNN_01.gif"
   [2]: ./images/CNN_02.gif "CNN_02.gif"
   [3]: ./images/CNN_03.png "CNN_03.png"
