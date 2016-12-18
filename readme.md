@@ -103,7 +103,12 @@
 #### （2）符号说明
 - `l`..................当前层
 - ![$${{M_j}}$$](http://latex.codecogs.com/png.latex?%5Cdpi%7B120%7D%20%5Clarge%20$${{M_j}}$$)..................输入maps的集合
-- up()..................上采样
+- up()..................上采样函数
+- ㅇ....................表示对应每个元素相乘
+- `β`....................下采样对应的“权重”（定义为常量）
+- ![$${p_i^{l - 1}}$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7Bp_i%5E%7Bl%20-%201%7D%7D%24%24)...................![$${{\rm{x}}_i^{l - 1}}$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7B%7B%5Crm%7Bx%7D%7D_i%5E%7Bl%20-%201%7D%7D%24%24)中在卷积运算中逐个与![$${k_{ij}^l}$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7Bk_%7Bij%7D%5El%7D%24%24)相乘的`patch`
+- down()..................下采样函数
+
 
 
 #### （3）卷积层
@@ -120,15 +125,25 @@
  - 也就是误差的计算，之前我在**BP神经网络**中推导过，这里不再给出
  - 当前层的第`j`个unit的灵敏度![$$\delta _{\rm{j}}^l$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%5Cdelta%20_%7B%5Crm%7Bj%7D%7D%5El%24%24)结果就是：先对下一层的节点（连接到当前层`l`的感兴趣节点的第`l+1`层的节点）的灵敏度求和（得到![$$\delta _{\rm{j}}^{l + 1}$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%5Cdelta%20_%7B%5Crm%7Bj%7D%7D%5E%7Bl%20&plus;%201%7D%24%24)），然后乘以这些连接对应的权值（连接第`l`层感兴趣节点和第`l+1`层节点的权值）`W`。再乘以当前层`l`的该神经元节点的输入`u`的激活函数**f的导数值**
  - ![$$\delta _{\rm{j}}^l = \beta _j^{l + 1}({f^'}(u_j^l) \circ up(\delta _{\rm{j}}^{l + 1}))$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%5Cdelta%20_%7B%5Crm%7Bj%7D%7D%5El%20%3D%20%5Cbeta%20_j%5E%7Bl%20&plus;%201%7D%28%7Bf%5E%27%7D%28u_j%5El%29%20%5Ccirc%20up%28%5Cdelta%20_%7B%5Crm%7Bj%7D%7D%5E%7Bl%20&plus;%201%7D%29%29%24%24)
+ - 下采样的“weights”可以定义为常量`β`（可以查看下面Pooling层输出的表示）
  - `up`表示**上采样**操作，因为我们之前假设每个卷积层之后跟着一个Pooling层，所以反向传播需要进行上采样
- - 
+ - `up`上采样可以使用**克罗内克积**（Kronecker）实现，如果A是一个 `m x n` 的矩阵，而B是一个 `p x q` 的矩阵，克罗内克积则是一个 `mp x nq` 的矩阵，![$$up({\rm{x}}) = {\rm{x}} \otimes {1_{n \times n}}$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24up%28%7B%5Crm%7Bx%7D%7D%29%20%3D%20%7B%5Crm%7Bx%7D%7D%20%5Cotimes%20%7B1_%7Bn%20%5Ctimes%20n%7D%7D%24%24)
+ ![enter description here][16]
+ - 所以**偏置**的**梯度**为：![$${{\partial E} \over {\partial {b_j}}} = \sum\limits_{u,v} {{{(\delta _{\rm{j}}^l)}_{uv}}} $$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7B%7B%5Cpartial%20E%7D%20%5Cover%20%7B%5Cpartial%20%7Bb_j%7D%7D%7D%20%3D%20%5Csum%5Climits_%7Bu%2Cv%7D%20%7B%7B%7B%28%5Cdelta%20_%7B%5Crm%7Bj%7D%7D%5El%29%7D_%7Buv%7D%7D%7D%20%24%24) （因为神经网络中对`b`的梯度为：(![$${{\partial E} \over {\partial b}} = {{\partial E} \over {\partial u}}{{\partial u} \over {\partial b}} = \delta $$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7B%7B%5Cpartial%20E%7D%20%5Cover%20%7B%5Cpartial%20b%7D%7D%20%3D%20%7B%7B%5Cpartial%20E%7D%20%5Cover%20%7B%5Cpartial%20u%7D%7D%7B%7B%5Cpartial%20u%7D%20%5Cover%20%7B%5Cpartial%20b%7D%7D%20%3D%20%5Cdelta%20%24%24)（δ就是误差，根据定义的**代价函数E**得来的），其中`u`为layer的输入：![$${u^l} = {W^l}{{\rm{x}}^{l - 1}} + {b^l}$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7Bu%5El%7D%20%3D%20%7BW%5El%7D%7B%7B%5Crm%7Bx%7D%7D%5E%7Bl%20-%201%7D%7D%20&plus;%20%7Bb%5El%7D%24%24)）
+ - 所以**卷积核权值的梯度**为：![$${{\partial E} \over {\partial k_{ij}^l}} = \sum\limits_{u,v} {{{(\delta _{\rm{j}}^l)}_{uv}}(p_i^{l - 1})uv} $$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7B%7B%5Cpartial%20E%7D%20%5Cover%20%7B%5Cpartial%20k_%7Bij%7D%5El%7D%7D%20%3D%20%5Csum%5Climits_%7Bu%2Cv%7D%20%7B%7B%7B%28%5Cdelta%20_%7B%5Crm%7Bj%7D%7D%5El%29%7D_%7Buv%7D%7D%28p_i%5E%7Bl%20-%201%7D%29uv%7D%20%24%24) （其中：![$${p_i^{l - 1}}$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7Bp_i%5E%7Bl%20-%201%7D%7D%24%24)为![$${{\rm{x}}_i^{l - 1}}$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7B%7B%5Crm%7Bx%7D%7D_i%5E%7Bl%20-%201%7D%7D%24%24)中在卷积运算中逐个与![$${k_{ij}^l}$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7Bk_%7Bij%7D%5El%7D%24%24)相乘的`patch`，因为权重的系数就是对应的`patch`，对权重求导，就是这个系数）
 
 
+#### （4）子采样层（Sub-sampling Layers）
+- 1）子采样层计算公式
+ - ![$${\rm{x}}_j^l = f(\beta _j^ldown({\rm{x}}_{\rm{j}}^{l - 1}) + b_j^l)$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7B%5Crm%7Bx%7D%7D_j%5El%20%3D%20f%28%5Cbeta%20_j%5Eldown%28%7B%5Crm%7Bx%7D%7D_%7B%5Crm%7Bj%7D%7D%5E%7Bl%20-%201%7D%29%20&plus;%20b_j%5El%29%24%24)
+ - 乘以一个常数权重`β`，再加上偏置，然后再调用激活函数（这里和上面的pooling的操作有所不同，但总的来数还是下采样的过程）
 
 
-
-
-
+- 2）梯度计算
+ - 敏感度公式:![$$\delta _{\rm{j}}^l = {f^'}(u_j^l) \circ conv2(\delta _{\rm{j}}^{l + 1},rot180(k_j^{l + 1}),'full')$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%5Cdelta%20_%7B%5Crm%7Bj%7D%7D%5El%20%3D%20%7Bf%5E%27%7D%28u_j%5El%29%20%5Ccirc%20conv2%28%5Cdelta%20_%7B%5Crm%7Bj%7D%7D%5E%7Bl%20&plus;%201%7D%2Crot180%28k_j%5E%7Bl%20&plus;%201%7D%29%2C%27full%27%29%24%24)
+ - 和上面的其实类似，就是换成下一层对应的权重`k`rot180()是旋转180度，因为卷积的时候是将卷积核旋转180度之后然后在点乘求和的
+ - 对偏置`b`的梯度与上面的一样
+ - 对于乘法偏置（文中叫 multiplicative bias）`β`的梯度为：![$${{\partial E} \over {\partial {\beta _j}}} = \sum\limits_{u,v} {{{(\delta _{\rm{j}}^l \circ d_j^l)}_{uv}}} $$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7B%7B%5Cpartial%20E%7D%20%5Cover%20%7B%5Cpartial%20%7B%5Cbeta%20_j%7D%7D%7D%20%3D%20%5Csum%5Climits_%7Bu%2Cv%7D%20%7B%7B%7B%28%5Cdelta%20_%7B%5Crm%7Bj%7D%7D%5El%20%5Ccirc%20d_j%5El%29%7D_%7Buv%7D%7D%7D%20%24%24)，其中![$$d_j^l = down({\rm{x}}_j^{l - 1})$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24d_j%5El%20%3D%20down%28%7B%5Crm%7Bx%7D%7D_j%5E%7Bl%20-%201%7D%29%24%24)
 
 
   [1]: ./images/CNN_01.gif "CNN_01.gif"
@@ -146,3 +161,4 @@
   [13]: ./images/CNN_13.png "CNN_13.png"
   [14]: ./images/CNN_15.png "CNN_15.png"
   [15]: ./images/CNN_14.png "CNN_14.png"
+  [16]: ./images/CNN_16.jpg "CNN_16.jpg"
