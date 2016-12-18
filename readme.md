@@ -95,7 +95,7 @@
 ### 8、CNN公式推导
 #### （1）说明
 - 参考论文：http://cogprints.org/5869/1/cnn_tutorial.pdf
-- 或者在这里查看：https://github.com/lawlite19/MachineLearning_TensorFlow/tree/master/paper/cnn_tutorial.pdf
+- 或者在这里查看：https://github.com/lawlite19/DeepLearning_Python/blob/master/paper/cnn_tutorial.pdf
 - **BP神经网络**之前写过推导，可以查看这里的第三部分BP神经网络：https://github.com/lawlite19/MachineLearning_Python
 - 我们假设CNN中每个**卷积层**下面都跟着一个**Pooling池化层**（下采样层）
 - 文章的理解可能会有问题
@@ -141,7 +141,7 @@
 
 - 2）梯度计算
  - 敏感度公式:![$$\delta _{\rm{j}}^l = {f^'}(u_j^l) \circ conv2(\delta _{\rm{j}}^{l + 1},rot180(k_j^{l + 1}),'full')$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%5Cdelta%20_%7B%5Crm%7Bj%7D%7D%5El%20%3D%20%7Bf%5E%27%7D%28u_j%5El%29%20%5Ccirc%20conv2%28%5Cdelta%20_%7B%5Crm%7Bj%7D%7D%5E%7Bl%20&plus;%201%7D%2Crot180%28k_j%5E%7Bl%20&plus;%201%7D%29%2C%27full%27%29%24%24)
- - 和上面的其实类似，就是换成下一层对应的权重`k`rot180()是旋转180度，因为卷积的时候是将卷积核旋转180度之后然后在点乘求和的
+ - 和上面的其实类似，就是换成下一层对应的权重`k`，rot180()是旋转180度，因为卷积的时候是将卷积核旋转180度之后然后在点乘求和的
  - 对偏置`b`的梯度与上面的一样
  - 对于乘法偏置（文中叫 multiplicative bias）`β`的梯度为：![$${{\partial E} \over {\partial {\beta _j}}} = \sum\limits_{u,v} {{{(\delta _{\rm{j}}^l \circ d_j^l)}_{uv}}} $$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7B%7B%5Cpartial%20E%7D%20%5Cover%20%7B%5Cpartial%20%7B%5Cbeta%20_j%7D%7D%7D%20%3D%20%5Csum%5Climits_%7Bu%2Cv%7D%20%7B%7B%7B%28%5Cdelta%20_%7B%5Crm%7Bj%7D%7D%5El%20%5Ccirc%20d_j%5El%29%7D_%7Buv%7D%7D%7D%20%24%24)，其中![$$d_j^l = down({\rm{x}}_j^{l - 1})$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24d_j%5El%20%3D%20down%28%7B%5Crm%7Bx%7D%7D_j%5E%7Bl%20-%201%7D%29%24%24)
 
