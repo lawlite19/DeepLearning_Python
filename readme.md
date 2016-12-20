@@ -147,6 +147,37 @@
 
 
 ## 二、权重初始化问题1_Sigmoid\tanh\Softsign激励函数
+### 1、说明
+- 参考论文：http://jmlr.org/proceedings/papers/v9/glorot10a/glorot10a.pdf
+- 或者查看[这里](https://github.com/lawlite19/DeepLearning_Python/blob/master/paper/Understanding the difficulty of training deep feedforward neural networks.pdf)，我放在github上了：https://github.com/lawlite19/DeepLearning_Python/blob/master/paper/Understanding the difficulty of training deep feedforward neural networks.pdf
+- 这是2010年的论文，当时只是讨论的`Sigmoid`，`tanh`和`Softsign`激活函数，解决深层神经网络梯度消失的问题，并提出了一种初始化权重`weights`的方法，但是对于`ReLu`激活函数还是失效的，下一篇再讲。
+
+### 2、实验
+- 论文先是指出了`Sigmoid`激励函数是不适合作为**深度学习**的激励函数的，因为它的**均值**总是大于`0`的，导致**后面**隐含层hidden layer的神经元趋于**饱和**
+![enter description here][17]
+- 构建了含有4个隐层的神经网络，激活函数为`Sigmoid`,观察每一层的激活值的均值和标准差的岁训练次数的变化情况，`layer1`表示**第一个**隐含层，一次类推。
+- 初始化权重![$${W_{ij}} \sim U[ - {1 \over {\sqrt n }},{1 \over {\sqrt n }}]$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7BW_%7Bij%7D%7D%20%5Csim%20U%5B%20-%20%7B1%20%5Cover%20%7B%5Csqrt%20n%20%7D%7D%2C%7B1%20%5Cover%20%7B%5Csqrt%20n%20%7D%7D%5D%24%24),即服从**均匀分布**
+- 如下图所示，实线表示**均值mean value**，**垂直的条**表示标准差。
+ - 因为使用的均匀分布进行的初始化，所以前几层x的均值近似为**0**，所以对应`Sigmoid`函数的值就是**0.5**
+ - 但是最后一层layer4的输出很快就饱和了（激活值趋于0）,训练到大100的时候才慢慢恢复正常
+ - 作者给出当有**5**个隐含层的时候，最后一层始终处于饱和状态
+ - 标准差反应的是数值的**波动**，可以看出后面才有了标准差的值
+![enter description here][18]
+- 直观解释
+ - 最后使用的是`softmax(b+Wh)`作为预测，刚开始训练的时候不能够很好的预测`y`的值，因此误差梯度会迫使`Wh`趋于`0`，所以会使`h`的值趋于`0`
+ - `h`就是上一层的激活输出，所以对应的激活值很快降为`0`
+- `tanh`激活函数是关于原点对称的，趋于**0**是没有问题的，因为梯度能够反向传回去。
+![enter description here][19]
+
+### 3、初试化方法公式推导
+- 首先**代价函数**使用的是**交叉熵代价函数**，相比对于**二次代价函数**会更好，看下对比就知道了，二次代价函数较为平坦，所以使用梯度下降会比较慢。（图中`W1`表示第一层的权重，`W2`表示第二层的权重）
+![enter description here][20]
+- 符号说明
+ - ![$${z^i}$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7Bz%5Ei%7D%24%24)………………………………第i层的激活值向量
+ - ![$${{\rm{s}}^i}$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7B%7B%5Crm%7Bs%7D%7D%5Ei%7D%24%24)………………………………第i+1层的输入
+ - x…………………………………输入
+ - ![$${{\rm{n}}_i}$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7B%7B%5Crm%7Bn%7D%7D_i%7D%24%24)………………………………..第i层神经元个数
+ - W………………………………权重
 
 
 
@@ -166,3 +197,7 @@
   [14]: ./images/CNN_15.png "CNN_15.png"
   [15]: ./images/CNN_14.png "CNN_14.png"
   [16]: ./images/CNN_16.jpg "CNN_16.jpg"
+  [17]: ./images/Weights_initialization_01.png "Weights_initialization_01.png"
+  [18]: ./images/Weights_initialization_02.png "Weights_initialization_02.png"
+  [19]: ./images/Weights_initialization_03.png "Weights_initialization_03.png"
+  [20]: ./images/Weights_initialization_04.png "Weights_initialization_04.png"
