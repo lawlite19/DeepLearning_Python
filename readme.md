@@ -171,6 +171,7 @@
 
 ### 3、初试化方法公式推导
 - 首先**代价函数**使用的是**交叉熵代价函数**，相比对于**二次代价函数**会更好，看下对比就知道了，二次代价函数较为平坦，所以使用梯度下降会比较慢。（图中`W1`表示第一层的权重，`W2`表示第二层的权重）
+- 以`tanh`激活函数为例
 ![enter description here][20]
 - 符号说明
  - ![$${z^i}$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7Bz%5Ei%7D%24%24)………………………………第i层的激活值向量
@@ -178,9 +179,36 @@
  - x…………………………………输入
  - ![$${{\rm{n}}_i}$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7B%7B%5Crm%7Bn%7D%7D_i%7D%24%24)………………………………..第i层神经元个数
  - W………………………………权重
-
-
-
+ - Cost………………………………代价函数
+- 所以第`i+1`层的输入：![$${{\rm{s}}^i} = {z^i}{W^i} + {b^i}$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7B%7B%5Crm%7Bs%7D%7D%5Ei%7D%20%3D%20%7Bz%5Ei%7D%7BW%5Ei%7D%20&plus;%20%7Bb%5Ei%7D%24%24)
+- ![$${z^{i + 1}} = f({s^i})$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7Bz%5E%7Bi%20&plus;%201%7D%7D%20%3D%20f%28%7Bs%5Ei%7D%29%24%24)，即`z`对应激活之后的值
+- 根据BP反向传播可以得到：![$${{\partial Cost} \over {\partial s_k^i}} = {f^'}(s_k^i)W_{k, \bullet }^{i + 1}{{\partial Cost} \over {\partial {s^{i + 1}}}}$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7B%7B%5Cpartial%20Cost%7D%20%5Cover%20%7B%5Cpartial%20s_k%5Ei%7D%7D%20%3D%20%7Bf%5E%27%7D%28s_k%5Ei%29W_%7Bk%2C%20%5Cbullet%20%7D%5E%7Bi%20&plus;%201%7D%7B%7B%5Cpartial%20Cost%7D%20%5Cover%20%7B%5Cpartial%20%7Bs%5E%7Bi%20&plus;%201%7D%7D%7D%7D%24%24)
+ - 权重的偏导（梯度）就为：![$${{\partial Cost} \over {\partial w_{l,k}^i}} = z_l^i{{\partial Cost} \over {\partial s_k^i}}$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7B%7B%5Cpartial%20Cost%7D%20%5Cover%20%7B%5Cpartial%20w_%7Bl%2Ck%7D%5Ei%7D%7D%20%3D%20z_l%5Ei%7B%7B%5Cpartial%20Cost%7D%20%5Cover%20%7B%5Cpartial%20s_k%5Ei%7D%7D%24%24)
+ - 还是BP反向传播的推导，可以查看我之前给的BP反向传播的推导。
+ - 它这里`W`是从`0`开始的，所以对应可能不太一致。
+- `tanh`的导数为：![$${[\tanh (x)]^'} = 1 - {[\tanh (x)]^2}$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7B%5B%5Ctanh%20%28x%29%5D%5E%27%7D%20%3D%201%20-%20%7B%5B%5Ctanh%20%28x%29%5D%5E2%7D%24%24)
+ - 所以：![$${f^'}(0) = 1$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7Bf%5E%27%7D%280%29%20%3D%201%24%24)
+ - 当![$$s_k^i$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24s_k%5Ei%24%24)的很小时，可以得到，![$${f^'}(s_k^i) \approx 1$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7Bf%5E%27%7D%28s_k%5Ei%29%20%5Capprox%201%24%24)
+ - 这里实际上他是假设激励函数是线性的，下一篇论文中也有提到。
+- 根据**方差**公式：![$$Var(x) = E({x^2}) - {E^2}(x)$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24Var%28x%29%20%3D%20E%28%7Bx%5E2%7D%29%20-%20%7BE%5E2%7D%28x%29%24%24)可以得到：
+![$$Var[{z^i}] = Var[x]\prod\limits_{j = 0}^{i - 1} {{n_j}Var[{W^j}]} $$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24Var%5B%7Bz%5Ei%7D%5D%20%3D%20Var%5Bx%5D%5Cprod%5Climits_%7Bj%20%3D%200%7D%5E%7Bi%20-%201%7D%20%7B%7Bn_j%7DVar%5B%7BW%5Ej%7D%5D%7D%20%24%24)，推导如下：
+ - ![$$Var(s) = Var(\sum\limits_i^n {{w_i}{x_i}} ) = \sum\limits_i^n {Var({w_i}{x_i})} $$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24Var%28s%29%20%3D%20Var%28%5Csum%5Climits_i%5En%20%7B%7Bw_i%7D%7Bx_i%7D%7D%20%29%20%3D%20%5Csum%5Climits_i%5En%20%7BVar%28%7Bw_i%7D%7Bx_i%7D%29%7D%20%24%24)
+ - ![enter description here][21]（式子太长，直接截图的，没用LaTex解析）
+ - 因为输入的**均值为0**，可以得到：![$$E(w) = E(x) = 0$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24E%28w%29%20%3D%20E%28x%29%20%3D%200%24%24)
+ - 所以：![$$Var(wx) = Var(w)Var(x)$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24Var%28wx%29%20%3D%20Var%28w%29Var%28x%29%24%24)，代入上面即可。
+- 因为之前![$${f^'}(s_k^i) \approx 1$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7Bf%5E%27%7D%28s_k%5Ei%29%20%5Capprox%201%24%24)，所以可以得到：
+![$$V{\rm{ar}}[{{\partial Cost} \over {\partial {s^i}}}] = Var[{{\partial Cost} \over {\partial {s^n}}}]\prod\limits_{j = i}^n {{n_{j + 1}}Var[{W^j}]} $$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24V%7B%5Crm%7Bar%7D%7D%5B%7B%7B%5Cpartial%20Cost%7D%20%5Cover%20%7B%5Cpartial%20%7Bs%5Ei%7D%7D%7D%5D%20%3D%20Var%5B%7B%7B%5Cpartial%20Cost%7D%20%5Cover%20%7B%5Cpartial%20%7Bs%5En%7D%7D%7D%5D%5Cprod%5Climits_%7Bj%20%3D%20i%7D%5En%20%7B%7Bn_%7Bj%20&plus;%201%7D%7DVar%5B%7BW%5Ej%7D%5D%7D%20%24%24)
+- 代入到对权重w偏导（即为梯度）的方差为:![$$Var[{{\partial Cost} \over {\partial {w^i}}}] = \prod\limits_{j = 0}^{i - 1} {{n_j}Var[{W^j}]} \prod\limits_{j = i}^{n - 1} {{n_{j + 1}}Var[{W^j}]}  * Var[x]Var[{{\partial Cost} \over {\partial {s^n}}}]$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24Var%5B%7B%7B%5Cpartial%20Cost%7D%20%5Cover%20%7B%5Cpartial%20%7Bw%5Ei%7D%7D%7D%5D%20%3D%20%5Cprod%5Climits_%7Bj%20%3D%200%7D%5E%7Bi%20-%201%7D%20%7B%7Bn_j%7DVar%5B%7BW%5Ej%7D%5D%7D%20%5Cprod%5Climits_%7Bj%20%3D%20i%7D%5E%7Bn%20-%201%7D%20%7B%7Bn_%7Bj%20&plus;%201%7D%7DVar%5B%7BW%5Ej%7D%5D%7D%20*%20Var%5Bx%5DVar%5B%7B%7B%5Cpartial%20Cost%7D%20%5Cover%20%7B%5Cpartial%20%7Bs%5En%7D%7D%7D%5D%24%24)
+- 对于正向传播，我们希望![$$\forall (i,j),Var[{z^i}] = Var[{z^j}]$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%5Cforall%20%28i%2Cj%29%2CVar%5B%7Bz%5Ei%7D%5D%20%3D%20Var%5B%7Bz%5Ej%7D%5D%24%24)
+ - 对于反向传播，同样希望：![$$\forall (i,j),Var[{{\partial Cost} \over {\partial {s^i}}}] = Var[{{\partial Cost} \over {\partial {s^j}}}]$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%5Cforall%20%28i%2Cj%29%2CVar%5B%7B%7B%5Cpartial%20Cost%7D%20%5Cover%20%7B%5Cpartial%20%7Bs%5Ei%7D%7D%7D%5D%20%3D%20Var%5B%7B%7B%5Cpartial%20Cost%7D%20%5Cover%20%7B%5Cpartial%20%7Bs%5Ej%7D%7D%7D%5D%24%24)
+ - 两种情况可以转化为：![$${n_i}Var[{w^{\rm{i}}}] = 1$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7Bn_i%7DVar%5B%7Bw%5E%7B%5Crm%7Bi%7D%7D%7D%5D%20%3D%201%24%24)和![$${n_{i + 1}}Var[{w^{\rm{i}}}] = 1$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7Bn_%7Bi%20&plus;%201%7D%7DVar%5B%7Bw%5E%7B%5Crm%7Bi%7D%7D%7D%5D%20%3D%201%24%24)（比如第一种：![](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24Var%5B%7Bz%5Ei%7D%5D%20%3D%20Var%5Bx%5D%5Cprod%5Climits_%7Bj%20%3D%200%7D%5E%7Bi%20-%201%7D%20%7B%7Bn_j%7DVar%5B%7BW%5Ej%7D%5D%7D%20%24%24)，![$$V{\rm{ar}}({z^i}) = Var(x)$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24V%7B%5Crm%7Bar%7D%7D%28%7Bz%5Ei%7D%29%20%3D%20Var%28x%29%24%24) ，所以 ![$${n_i}Var[{w^{\rm{i}}}] = 1$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7Bn_i%7DVar%5B%7Bw%5E%7B%5Crm%7Bi%7D%7D%7D%5D%20%3D%201%24%24)，第二种情况同理）
+- 两式相加得：![$$Var[{W^i}] = {2 \over {{n_i} + {n_{i + 1}}}}$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24Var%5B%7BW%5Ei%7D%5D%20%3D%20%7B2%20%5Cover%20%7B%7Bn_i%7D%20&plus;%20%7Bn_%7Bi%20&plus;%201%7D%7D%7D%7D%24%24)
+- 最后提出了一个归一化的初始化方法,因为**W**服从**均匀分布**`U[-c,c]`，根据均匀分布的方差公式得：![$${{{{[c - ( - c)]}^2}} \over {12}} = {{{c^2}} \over 3}$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7B%7B%7B%7B%5Bc%20-%20%28%20-%20c%29%5D%7D%5E2%7D%7D%20%5Cover%20%7B12%7D%7D%20%3D%20%7B%7B%7Bc%5E2%7D%7D%20%5Cover%203%7D%24%24)
+ - 所以：![$${2 \over {{n_i} + {n_{i + 1}}}} = {{{c^2}} \over 3}$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7B2%20%5Cover%20%7B%7Bn_i%7D%20&plus;%20%7Bn_%7Bi%20&plus;%201%7D%7D%7D%7D%20%3D%20%7B%7B%7Bc%5E2%7D%7D%20%5Cover%203%7D%24%24)
+ - 求出，![$$c = {{\sqrt 6 } \over {\sqrt {{n_i} + {n_{i + 1}}} }}$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24c%20%3D%20%7B%7B%5Csqrt%206%20%7D%20%5Cover%20%7B%5Csqrt%20%7B%7Bn_i%7D%20&plus;%20%7Bn_%7Bi%20&plus;%201%7D%7D%7D%20%7D%7D%24%24)
+ - 所以**◆◆**最终给出初始化权重的方法为：![$$W \sim U[ - {{\sqrt 6 } \over {\sqrt {{n_i} + {n_{i + 1}}} }},{{\sqrt 6 } \over {\sqrt {{n_i} + {n_{i + 1}}} }}]$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24W%20%5Csim%20U%5B%20-%20%7B%7B%5Csqrt%206%20%7D%20%5Cover%20%7B%5Csqrt%20%7B%7Bn_i%7D%20&plus;%20%7Bn_%7Bi%20&plus;%201%7D%7D%7D%20%7D%7D%2C%7B%7B%5Csqrt%206%20%7D%20%5Cover%20%7B%5Csqrt%20%7B%7Bn_i%7D%20&plus;%20%7Bn_%7Bi%20&plus;%201%7D%7D%7D%20%7D%7D%5D%24%24)
+- 这就是**Xavier初始化**方法
+ 
   [1]: ./images/CNN_01.gif "CNN_01.gif"
   [2]: ./images/CNN_02.gif "CNN_02.gif"
   [3]: ./images/CNN_03.png "CNN_03.png"
@@ -201,3 +229,4 @@
   [18]: ./images/Weights_initialization_02.png "Weights_initialization_02.png"
   [19]: ./images/Weights_initialization_03.png "Weights_initialization_03.png"
   [20]: ./images/Weights_initialization_04.png "Weights_initialization_04.png"
+  [21]: ./images/Weights_initialization_05.png "Weights_initialization_05.png"
