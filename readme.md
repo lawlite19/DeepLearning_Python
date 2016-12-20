@@ -149,7 +149,7 @@
 ## 二、权重初始化问题1_Sigmoid\tanh\Softsign激励函数
 ### 1、说明
 - 参考论文：http://jmlr.org/proceedings/papers/v9/glorot10a/glorot10a.pdf
-- 或者查看[这里](https://github.com/lawlite19/DeepLearning_Python/blob/master/paper/Understanding the difficulty of training deep feedforward neural networks.pdf)，我放在github上了：https://github.com/lawlite19/DeepLearning_Python/blob/master/paper/Understanding the difficulty of training deep feedforward neural networks.pdf
+- 或者查看[这里](https://github.com/lawlite19/DeepLearning_Python/blob/master/paper/Understanding%20the%20difficulty%20of%20training%20deep%20feedforward%20neural%20networks.pdf)，我放在github上了：https://github.com/lawlite19/DeepLearning_Python/blob/master/paper/Understanding%20the%20difficulty%20of%20training%20deep%20feedforward%20neural%20networks.pdf
 - 这是2010年的论文，当时只是讨论的`Sigmoid`，`tanh`和`Softsign`激活函数，解决深层神经网络梯度消失的问题，并提出了一种初始化权重`weights`的方法，但是对于`ReLu`激活函数还是失效的，下一篇再讲。
 
 ### 2、实验
