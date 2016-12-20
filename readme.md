@@ -146,6 +146,10 @@
  - 对于乘法偏置（文中叫 multiplicative bias）`β`的梯度为：![$${{\partial E} \over {\partial {\beta _j}}} = \sum\limits_{u,v} {{{(\delta _{\rm{j}}^l \circ d_j^l)}_{uv}}} $$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7B%7B%5Cpartial%20E%7D%20%5Cover%20%7B%5Cpartial%20%7B%5Cbeta%20_j%7D%7D%7D%20%3D%20%5Csum%5Climits_%7Bu%2Cv%7D%20%7B%7B%7B%28%5Cdelta%20_%7B%5Crm%7Bj%7D%7D%5El%20%5Ccirc%20d_j%5El%29%7D_%7Buv%7D%7D%7D%20%24%24)，其中![$$d_j^l = down({\rm{x}}_j^{l - 1})$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24d_j%5El%20%3D%20down%28%7B%5Crm%7Bx%7D%7D_j%5E%7Bl%20-%201%7D%29%24%24)
 
 
+## 二、权重初始化问题
+
+
+
   [1]: ./images/CNN_01.gif "CNN_01.gif"
   [2]: ./images/CNN_02.gif "CNN_02.gif"
   [3]: ./images/CNN_03.png "CNN_03.png"
