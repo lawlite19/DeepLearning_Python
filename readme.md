@@ -185,7 +185,7 @@
 - 激活之后的值表示：    
 ![$${z^{i + 1}} = f({s^i})$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7Bz%5E%7Bi%20&plus;%201%7D%7D%20%3D%20f%28%7Bs%5Ei%7D%29%24%24)，
 - 根据BP反向传播可以得到：    
-![$${{\partial Cost} \over {\partial s_k^i}} = {f^'}(s_k^i)W_{k, \bullet }^{i + 1}{{\partial Cost} \over {\partial {s^{i + 1}}}}$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7B%7B%5Cpartial%20Cost%7D%20%5Cover%20%7B%5Cpartial%20s_k%5Ei%7D%7D%20%3D%20%7Bf%5E%27%7D%28s_k%5Ei%29W_%7Bk%2C%20%5Cbullet%20%7D%5E%7Bi%20&plus;%201%7D%7B%7B%5Cpartial%20Cost%7D%20%5Cover%20%7B%5Cpartial%20%7Bs%5E%7Bi%20&plus;%201%7D%7D%7D%7D%24%24)````````````````````````````````````(1)
+![$${{\partial Cost} \over {\partial s_k^i}} = {f^'}(s_k^i)W_{k, \bullet }^{i + 1}{{\partial Cost} \over {\partial {s^{i + 1}}}}$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7B%7B%5Cpartial%20Cost%7D%20%5Cover%20%7B%5Cpartial%20s_k%5Ei%7D%7D%20%3D%20%7Bf%5E%27%7D%28s_k%5Ei%29W_%7Bk%2C%20%5Cbullet%20%7D%5E%7Bi%20&plus;%201%7D%7B%7B%5Cpartial%20Cost%7D%20%5Cover%20%7B%5Cpartial%20%7Bs%5E%7Bi%20&plus;%201%7D%7D%7D%7D%24%24)
  - 权重的偏导（梯度）就为：    
  ![$${{\partial Cost} \over {\partial w_{l,k}^i}} = z_l^i{{\partial Cost} \over {\partial s_k^i}}$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24%7B%7B%5Cpartial%20Cost%7D%20%5Cover%20%7B%5Cpartial%20w_%7Bl%2Ck%7D%5Ei%7D%7D%20%3D%20z_l%5Ei%7B%7B%5Cpartial%20Cost%7D%20%5Cover%20%7B%5Cpartial%20s_k%5Ei%7D%7D%24%24)
  - 还是BP反向传播的推导，可以查看我之前给的BP反向传播的推导。
