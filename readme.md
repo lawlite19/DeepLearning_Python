@@ -258,7 +258,7 @@
  - 对于`x`来说：![$$Var[{x_l}] \ne E[x_l^2]$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24Var%5B%7Bx_l%7D%5D%20%5Cne%20E%5Bx_l%5E2%5D%24%24)，除非`x`的均值也是0,
  - 对于`ReLu`函数来说：![$${x_l} = \max (0,{y_{l - 1}})$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%7Bx_l%7D%20%3D%20%5Cmax%20%280%2C%7By_%7Bl%20-%201%7D%7D%29%24%24)，所以不可能均值为0
 - `w`满足对称区间的分布，并且偏置![$${b_{l - 1}} = 0$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%7Bb_%7Bl%20-%201%7D%7D%20%3D%200%24%24)，所以![$${y_{l - 1}}$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%7By_%7Bl%20-%201%7D%7D%24%24)也满足对称区间的分布，所以：    
-![enter description here][25]..................................................(4)
+![enter description here][25]..........................................(4)
 - 将(4)代入(3)中得：      
 ![$$Var[{y_l}] = {1 \over 2}{n_l}Var[{w_l}]Var[{y_{l - 1}}]$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24Var%5B%7By_l%7D%5D%20%3D%20%7B1%20%5Cover%202%7D%7Bn_l%7DVar%5B%7Bw_l%7D%5DVar%5B%7By_%7Bl%20-%201%7D%7D%5D%24%24).......................................................(5)
 - 所以对于`L`层:            
