@@ -226,7 +226,12 @@
 ------------------------------------------------------
 
 ## 三、权重初始化问题2_`ReLu`激励函数
-### 1、`ReLu/PReLu`激励函数
+### 1、说明
+- 参考论文：https://arxiv.org/pdf/1502.01852v1.pdf
+- 或者查看[这里](https://github.com/lawlite19/DeepLearning_Python/blob/master/paper/Understanding%20the%20difficulty%20of%20training%20deep%20feedforward%20neural%20networks.pdf)，我放在github上了：https://github.com/lawlite19/DeepLearning_Python/blob/master/paper/Understanding%20the%20difficulty%20of%20training%20deep%20feedforward%20neural%20networks.pdf
+
+
+### 2、`ReLu/PReLu`激励函数
 - 目前`ReLu`激活函数使用比较多，而上面一篇论文没有讨论，如果还是使用同样初始化权重的方法（**Xavier初始化**）会有问题
 - PReLu函数定义如下：
  - ![enter description here][22]
@@ -234,7 +239,7 @@
 - ReLu（左）和PReLu（右）激活函数图像             
 ![enter description here][23]
 
-### 2、前向传播推导
+### 3、前向传播推导
 - 符号说明
  - ε……………………………………目标函数
  - μ……………………………………动量
@@ -269,7 +274,7 @@
 - 所以**初始化方法**为：是`w`满足**均值为0**，**标准差**为![$$\sqrt {{2 \over {{n_l}}}} $$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%5Csqrt%20%7B%7B2%20%5Cover%20%7B%7Bn_l%7D%7D%7D%7D%20%24%24)的**高斯分布**，同时**偏置**初始化为`0`
 
 
-### 3、反向传播推导
+### 4、反向传播推导
 - ![$$\Delta {{\rm{x}}_l} = \widehat {{W_l}}\Delta {y_l}$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%5CDelta%20%7B%7B%5Crm%7Bx%7D%7D_l%7D%20%3D%20%5Cwidehat%20%7B%7BW_l%7D%7D%5CDelta%20%7By_l%7D%24%24)....................................................(7)
  - 假设![$$\widehat {{W_l}}$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%5Cwidehat%20%7B%7BW_l%7D%7D%24%24%24%24)和![$$\Delta {y_l}$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%5CDelta%20%7By_l%7D%24%24)相互独立的
  - 当![$$\widehat {{W_l}}$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%5Cwidehat%20%7B%7BW_l%7D%7D%24%24%24%24)初始化Wie对称区间的分布时，可以得到：![$$\Delta {{\rm{x}}_l}$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%5CDelta%20%7B%7B%5Crm%7Bx%7D%7D_l%7D%24%24)的**均值**为0
@@ -289,7 +294,7 @@
 
 - 所以![$${{\rm{w}}_l}$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%7B%7B%5Crm%7Bw%7D%7D_l%7D%24%24)应满足**均值为0**，**标准差**为：![$$\sqrt {{2 \over {\widehat {{n_l}}}}} $$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%5Csqrt%20%7B%7B2%20%5Cover%20%7B%5Cwidehat%20%7B%7Bn_l%7D%7D%7D%7D%7D%20%24%24)的分布
 
-### 4、正向和反向传播讨论、实验和**PReLu**函数
+### 5、正向和反向传播讨论、实验和**PReLu**函数
 - 对于**正向和反向**两种初始化权重的方式都是可以的，论文中的模型都能够**收敛**
 - 比如利用**反向传播**得到的初始化得到：![$$\prod\limits_{l = 2}^L {{1 \over 2}\widehat {{n_l}}Var[{w_l}]}  = 1$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%5Cprod%5Climits_%7Bl%20%3D%202%7D%5EL%20%7B%7B1%20%5Cover%202%7D%5Cwidehat%20%7B%7Bn_l%7D%7DVar%5B%7Bw_l%7D%5D%7D%20%3D%201%24%24)
 - 对应到**正向传播**中得到：    
