@@ -222,7 +222,66 @@
  - 所以**◆◆**最终给出初始化权重的方法为：          
  ![$$W \sim U[ - {{\sqrt 6 } \over {\sqrt {{n_i} + {n_{i + 1}}} }},{{\sqrt 6 } \over {\sqrt {{n_i} + {n_{i + 1}}} }}]$$](http://latex.codecogs.com/gif.latex?%5Clarge%20%24%24W%20%5Csim%20U%5B%20-%20%7B%7B%5Csqrt%206%20%7D%20%5Cover%20%7B%5Csqrt%20%7B%7Bn_i%7D%20&plus;%20%7Bn_%7Bi%20&plus;%201%7D%7D%7D%20%7D%7D%2C%7B%7B%5Csqrt%206%20%7D%20%5Cover%20%7B%5Csqrt%20%7B%7Bn_i%7D%20&plus;%20%7Bn_%7Bi%20&plus;%201%7D%7D%7D%20%7D%7D%5D%24%24)
 - 这就是**Xavier初始化**方法
+
+------------------------------------------------------
+
+## 三、权重初始化问题2_`ReLu`激励函数
+### 1、`ReLu/PReLu`激励函数
+- 目前`ReLu`激活函数使用比较多，而上面一篇论文没有讨论，如果还是使用同样初始化权重的方法（**Xavier初始化**）会有问题
+- PReLu函数定义如下：
+ - ![enter description here][22]
+ - 等价于：![$$f({y_i}) = \max (0,{y_i}) + {a_i}\min (0,{y_i})$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24f%28%7By_i%7D%29%20%3D%20%5Cmax%20%280%2C%7By_i%7D%29%20&plus;%20%7Ba_i%7D%5Cmin%20%280%2C%7By_i%7D%29%24%24)
+- ReLu（左）和PReLu（右）激活函数图像
+![enter description here][23]
+
+### 2、前向传播推导
+- 符号说明
+ - ε…………………………………目标函数
+ - μ…………………………………动量
+ - α…………………………………学习率
+ - f()………………………………激励函数
+ - l……………………………………当前层
+ - L……………………………………神经网络总层数
+ - k……………………………………过滤器filter的大小
+ - c……………………………………输入通道个数
+ - x……………………………………k2c*1的向量
+ - d……………………………………过滤器filter的个数
+ - b……………………………………偏置向量
+- ![$${y_l} = {W_l}{{\rm{x}}_l} + {b_l}$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%7By_l%7D%20%3D%20%7BW_l%7D%7B%7B%5Crm%7Bx%7D%7D_l%7D%20&plus;%20%7Bb_l%7D%24%24).............................(1)
+
+### 3、
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
  
+
+
   [1]: ./images/CNN_01.gif "CNN_01.gif"
   [2]: ./images/CNN_02.gif "CNN_02.gif"
   [3]: ./images/CNN_03.png "CNN_03.png"
@@ -244,3 +303,5 @@
   [19]: ./images/Weights_initialization_03.png "Weights_initialization_03.png"
   [20]: ./images/Weights_initialization_04.png "Weights_initialization_04.png"
   [21]: ./images/Weights_initialization_05.png "Weights_initialization_05.png"
+  [22]: ./images/Weights_initialization_06.png "Weights_initialization_06.png"
+  [23]: ./images/Weights_initialization_07.png "Weights_initialization_07.png"
