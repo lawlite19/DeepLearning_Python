@@ -231,24 +231,35 @@
 - PReLu函数定义如下：
  - ![enter description here][22]
  - 等价于：![$$f({y_i}) = \max (0,{y_i}) + {a_i}\min (0,{y_i})$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24f%28%7By_i%7D%29%20%3D%20%5Cmax%20%280%2C%7By_i%7D%29%20&plus;%20%7Ba_i%7D%5Cmin%20%280%2C%7By_i%7D%29%24%24)
-- ReLu（左）和PReLu（右）激活函数图像
+- ReLu（左）和PReLu（右）激活函数图像             
 ![enter description here][23]
 
 ### 2、前向传播推导
 - 符号说明
- - ε…………………………………目标函数
- - μ…………………………………动量
- - α…………………………………学习率
+ - ε……………………………………目标函数
+ - μ……………………………………动量
+ - α……………………………………学习率
  - f()………………………………激励函数
  - l……………………………………当前层
  - L……………………………………神经网络总层数
- - k……………………………………过滤器filter的大小
+ - k……………………………………过滤器`filter`的大小
  - c……………………………………输入通道个数
- - x……………………………………k2c*1的向量
- - d……………………………………过滤器filter的个数
+ - x……………………………………`k^2c*1`的向量
+ - d……………………………………过滤器`filter`的个数
  - b……………………………………偏置向量
 - ![$${y_l} = {W_l}{{\rm{x}}_l} + {b_l}$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%7By_l%7D%20%3D%20%7BW_l%7D%7B%7B%5Crm%7Bx%7D%7D_l%7D%20&plus;%20%7Bb_l%7D%24%24).............................(1)
-
+ - ![$${{\rm{x}}_l} = f({y_{l - 1}})$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%7B%7B%5Crm%7Bx%7D%7D_l%7D%20%3D%20f%28%7By_%7Bl%20-%201%7D%7D%29%24%24) 
+ - ![$${{\rm{c}}_l} = {d_{l - 1}}$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%7B%7B%5Crm%7Bc%7D%7D_l%7D%20%3D%20%7Bd_%7Bl%20-%201%7D%7D%24%24)
+- 根据式`(1)`得：     
+![$$Var[{y_l}] = {n_l}Var[{w_l}{x_l}]$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24Var%5B%7By_l%7D%5D%20%3D%20%7Bn_l%7DVar%5B%7Bw_l%7D%7Bx_l%7D%5D%24%24)....................................(2)
+- 因为初始化权重`w`均值为0，所以**期望**：![$$E({w_l}) = 0$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24E%28%7Bw_l%7D%29%20%3D%200%24%24)，**方差**：![$$Var[{w_l}] = E(w_l^2) - {E^2}({w_l}) = E(w_l^2)$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24Var%5B%7Bw_l%7D%5D%20%3D%20E%28w_l%5E2%29%20-%20%7BE%5E2%7D%28%7Bw_l%7D%29%20%3D%20E%28w_l%5E2%29%24%24)
+- 根据式`(2)`继续推导：     
+![enter description here][24].....................................(3)
+ - 对于`x`来说：![$$Var[{x_l}] \ne E[x_l^2]$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24Var%5B%7Bx_l%7D%5D%20%5Cne%20E%5Bx_l%5E2%5D%24%24)，除非`x`的均值也是0,
+ - 对于`ReLu`函数来说：![$${x_l} = \max (0,{y_{l - 1}})$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%7Bx_l%7D%20%3D%20%5Cmax%20%280%2C%7By_%7Bl%20-%201%7D%7D%29%24%24)，所以不可能均值为0
+ - 让`w`满足对称区间的分布，并且偏置![$${b_{l - 1}} = 0$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%7Bb_%7Bl%20-%201%7D%7D%20%3D%200%24%24)，所以![$${y_{l - 1}}$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%7By_%7Bl%20-%201%7D%7D%24%24)也满足对称区间的分布，所以：    
+ ![enter description here][25].........................................(4)
+ 
 ### 3、
 
 
@@ -305,3 +316,5 @@
   [21]: ./images/Weights_initialization_05.png "Weights_initialization_05.png"
   [22]: ./images/Weights_initialization_06.png "Weights_initialization_06.png"
   [23]: ./images/Weights_initialization_07.png "Weights_initialization_07.png"
+  [24]: ./images/Weights_initialization_08.png "Weights_initialization_08.png"
+  [25]: ./images/Weights_initialization_09.png "Weights_initialization_09.png"
