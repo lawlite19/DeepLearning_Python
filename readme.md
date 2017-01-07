@@ -247,19 +247,26 @@
  - x……………………………………`k^2c*1`的向量
  - d……………………………………过滤器`filter`的个数
  - b……………………………………偏置向量
-- ![$${y_l} = {W_l}{{\rm{x}}_l} + {b_l}$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%7By_l%7D%20%3D%20%7BW_l%7D%7B%7B%5Crm%7Bx%7D%7D_l%7D%20&plus;%20%7Bb_l%7D%24%24).............................(1)
+- ![$${y_l} = {W_l}{{\rm{x}}_l} + {b_l}$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%7By_l%7D%20%3D%20%7BW_l%7D%7B%7B%5Crm%7Bx%7D%7D_l%7D%20&plus;%20%7Bb_l%7D%24%24)..............................................................(1)
  - ![$${{\rm{x}}_l} = f({y_{l - 1}})$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%7B%7B%5Crm%7Bx%7D%7D_l%7D%20%3D%20f%28%7By_%7Bl%20-%201%7D%7D%29%24%24) 
  - ![$${{\rm{c}}_l} = {d_{l - 1}}$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%7B%7B%5Crm%7Bc%7D%7D_l%7D%20%3D%20%7Bd_%7Bl%20-%201%7D%7D%24%24)
 - 根据式`(1)`得：     
-![$$Var[{y_l}] = {n_l}Var[{w_l}{x_l}]$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24Var%5B%7By_l%7D%5D%20%3D%20%7Bn_l%7DVar%5B%7Bw_l%7D%7Bx_l%7D%5D%24%24)....................................(2)
+![$$Var[{y_l}] = {n_l}Var[{w_l}{x_l}]$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24Var%5B%7By_l%7D%5D%20%3D%20%7Bn_l%7DVar%5B%7Bw_l%7D%7Bx_l%7D%5D%24%24)..................................................(2)
 - 因为初始化权重`w`均值为0，所以**期望**：![$$E({w_l}) = 0$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24E%28%7Bw_l%7D%29%20%3D%200%24%24)，**方差**：![$$Var[{w_l}] = E(w_l^2) - {E^2}({w_l}) = E(w_l^2)$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24Var%5B%7Bw_l%7D%5D%20%3D%20E%28w_l%5E2%29%20-%20%7BE%5E2%7D%28%7Bw_l%7D%29%20%3D%20E%28w_l%5E2%29%24%24)
 - 根据式`(2)`继续推导：     
-![enter description here][24].....................................(3)
+![enter description here][24]............................................(3)
  - 对于`x`来说：![$$Var[{x_l}] \ne E[x_l^2]$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24Var%5B%7Bx_l%7D%5D%20%5Cne%20E%5Bx_l%5E2%5D%24%24)，除非`x`的均值也是0,
  - 对于`ReLu`函数来说：![$${x_l} = \max (0,{y_{l - 1}})$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%7Bx_l%7D%20%3D%20%5Cmax%20%280%2C%7By_%7Bl%20-%201%7D%7D%29%24%24)，所以不可能均值为0
- - 让`w`满足对称区间的分布，并且偏置![$${b_{l - 1}} = 0$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%7Bb_%7Bl%20-%201%7D%7D%20%3D%200%24%24)，所以![$${y_{l - 1}}$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%7By_%7Bl%20-%201%7D%7D%24%24)也满足对称区间的分布，所以：    
- ![enter description here][25].........................................(4)
- 
+- `w`满足对称区间的分布，并且偏置![$${b_{l - 1}} = 0$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%7Bb_%7Bl%20-%201%7D%7D%20%3D%200%24%24)，所以![$${y_{l - 1}}$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%7By_%7Bl%20-%201%7D%7D%24%24)也满足对称区间的分布，所以：    
+![enter description here][25]..................................................(4)
+- 将(4)代入(3)中得：      
+![$$Var[{y_l}] = {1 \over 2}{n_l}Var[{w_l}]Var[{y_{l - 1}}]$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24Var%5B%7By_l%7D%5D%20%3D%20%7B1%20%5Cover%202%7D%7Bn_l%7DVar%5B%7Bw_l%7D%5DVar%5B%7By_%7Bl%20-%201%7D%7D%5D%24%24).......................................................(5)
+- 所以对于`L`层:            
+![$$Var[{y_L}] = Var[{y_1}]\prod\limits_{l = 2}^L {{1 \over 2}{n_l}Var[{w_l}]} $$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24Var%5B%7By_L%7D%5D%20%3D%20Var%5B%7By_1%7D%5D%5Cprod%5Climits_%7Bl%20%3D%202%7D%5EL%20%7B%7B1%20%5Cover%202%7D%7Bn_l%7DVar%5B%7Bw_l%7D%5D%7D%20%24%24).....................................................................(6)
+ - 从上式可以看出，因为**累乘**的存在，若是![$${1 \over 2}{n_l}Var[{w_l}] < 1$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%7B1%20%5Cover%202%7D%7Bn_l%7DVar%5B%7Bw_l%7D%5D%20%3C%201%24%24)，每次累乘都会使方差缩小，若是大于1，每次会使方差当大。
+ - 所以我们希望：     
+ ![$${1 \over 2}{n_l}Var[{w_l}] = 1$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%7B1%20%5Cover%202%7D%7Bn_l%7DVar%5B%7Bw_l%7D%5D%20%3D%201%24%24)
+- 所以**初始化方法**为：是`w`满足**均值为0**，**标准差**为![$$\sqrt {{2 \over {{n_l}}}} $$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%5Csqrt%20%7B%7B2%20%5Cover%20%7B%7Bn_l%7D%7D%7D%7D%20%24%24)的**高斯分布**，同时**偏置**初始化为0
 ### 3、
 
 
