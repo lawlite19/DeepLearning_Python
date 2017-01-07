@@ -259,15 +259,58 @@
  - 对于`ReLu`函数来说：![$${x_l} = \max (0,{y_{l - 1}})$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%7Bx_l%7D%20%3D%20%5Cmax%20%280%2C%7By_%7Bl%20-%201%7D%7D%29%24%24)，所以不可能均值为0
 - `w`满足对称区间的分布，并且偏置![$${b_{l - 1}} = 0$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%7Bb_%7Bl%20-%201%7D%7D%20%3D%200%24%24)，所以![$${y_{l - 1}}$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%7By_%7Bl%20-%201%7D%7D%24%24)也满足对称区间的分布，所以：    
 ![enter description here][25]..........................................(4)
-- 将(4)代入(3)中得：      
+- 将上式`(4)`代入`(3)`中得：      
 ![$$Var[{y_l}] = {1 \over 2}{n_l}Var[{w_l}]Var[{y_{l - 1}}]$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24Var%5B%7By_l%7D%5D%20%3D%20%7B1%20%5Cover%202%7D%7Bn_l%7DVar%5B%7Bw_l%7D%5DVar%5B%7By_%7Bl%20-%201%7D%7D%5D%24%24).......................................................(5)
 - 所以对于`L`层:            
 ![$$Var[{y_L}] = Var[{y_1}]\prod\limits_{l = 2}^L {{1 \over 2}{n_l}Var[{w_l}]} $$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24Var%5B%7By_L%7D%5D%20%3D%20Var%5B%7By_1%7D%5D%5Cprod%5Climits_%7Bl%20%3D%202%7D%5EL%20%7B%7B1%20%5Cover%202%7D%7Bn_l%7DVar%5B%7Bw_l%7D%5D%7D%20%24%24).....................................................................(6)
- - 从上式可以看出，因为**累乘**的存在，若是![$${1 \over 2}{n_l}Var[{w_l}] < 1$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%7B1%20%5Cover%202%7D%7Bn_l%7DVar%5B%7Bw_l%7D%5D%20%3C%201%24%24)，每次累乘都会使方差缩小，若是大于1，每次会使方差当大。
+ - 从上式可以看出，因为**累乘**的存在，若是![$${1 \over 2}{n_l}Var[{w_l}] < 1$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%7B1%20%5Cover%202%7D%7Bn_l%7DVar%5B%7Bw_l%7D%5D%20%3C%201%24%24)，每次累乘都会使方差缩小，若是大于`1`，每次会使方差当大。
  - 所以我们希望：     
  ![$${1 \over 2}{n_l}Var[{w_l}] = 1$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%7B1%20%5Cover%202%7D%7Bn_l%7DVar%5B%7Bw_l%7D%5D%20%3D%201%24%24)
-- 所以**初始化方法**为：是`w`满足**均值为0**，**标准差**为![$$\sqrt {{2 \over {{n_l}}}} $$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%5Csqrt%20%7B%7B2%20%5Cover%20%7B%7Bn_l%7D%7D%7D%7D%20%24%24)的**高斯分布**，同时**偏置**初始化为0
-### 3、
+- 所以**初始化方法**为：是`w`满足**均值为0**，**标准差**为![$$\sqrt {{2 \over {{n_l}}}} $$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%5Csqrt%20%7B%7B2%20%5Cover%20%7B%7Bn_l%7D%7D%7D%7D%20%24%24)的**高斯分布**，同时**偏置**初始化为`0`
+
+
+### 3、反向传播推导
+- ![$$\Delta {{\rm{x}}_l} = \widehat {{W_l}}\Delta {y_l}$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%5CDelta%20%7B%7B%5Crm%7Bx%7D%7D_l%7D%20%3D%20%5Cwidehat%20%7B%7BW_l%7D%7D%5CDelta%20%7By_l%7D%24%24)....................................................(7)
+ - 假设![$$\widehat {{W_l}}$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%5Cwidehat%20%7B%7BW_l%7D%7D%24%24%24%24)和![$$\Delta {y_l}$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%5CDelta%20%7By_l%7D%24%24)相互独立的
+ - 当![$$\widehat {{W_l}}$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%5Cwidehat%20%7B%7BW_l%7D%7D%24%24%24%24)初始化Wie对称区间的分布时，可以得到：![$$\Delta {{\rm{x}}_l}$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%5CDelta%20%7B%7B%5Crm%7Bx%7D%7D_l%7D%24%24)的**均值**为0
+ - `△x,△y`都表示梯度，即：   
+ ![$$\Delta {\rm{x}} = {{\partial \varepsilon } \over {\partial {\rm{x}}}}$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%5CDelta%20%7B%5Crm%7Bx%7D%7D%20%3D%20%7B%7B%5Cpartial%20%5Cvarepsilon%20%7D%20%5Cover%20%7B%5Cpartial%20%7B%5Crm%7Bx%7D%7D%7D%7D%24%24)，![$$\Delta y = {{\partial \varepsilon } \over {\partial y}}$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%5CDelta%20y%20%3D%20%7B%7B%5Cpartial%20%5Cvarepsilon%20%7D%20%5Cover%20%7B%5Cpartial%20y%7D%7D%24%24)
+- 根据**反向传播**：     
+![$$\Delta {y_l} = {f^'}({y_l})\Delta {x_{l + 1}}$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%5CDelta%20%7By_l%7D%20%3D%20%7Bf%5E%27%7D%28%7By_l%7D%29%5CDelta%20%7Bx_%7Bl%20&plus;%201%7D%7D%24%24)
+ - 对于`ReLu`函数，**f的导数**为`0`或`1`，且**概率是相等的**，假设![$${f^'}({y_l})$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%7Bf%5E%27%7D%28%7By_l%7D%29%24%24)和![$$\Delta {x_{l + 1}}$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%5CDelta%20%7Bx_%7Bl%20&plus;%201%7D%7D%24%24)是相互独立的，
+ - 所以：![$$E[\Delta {y_l}] = E[\Delta {x_{l + 1}}]/2 = 0$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24E%5B%5CDelta%20%7By_l%7D%5D%20%3D%20E%5B%5CDelta%20%7Bx_%7Bl%20&plus;%201%7D%7D%5D/2%20%3D%200%24%24)
+- 所以：![$$E[{(\Delta {y_l})^2}] = Var[\Delta {y_l}] = {1 \over 2}Var[\Delta {x_{l + 1}}]$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24E%5B%7B%28%5CDelta%20%7By_l%7D%29%5E2%7D%5D%20%3D%20Var%5B%5CDelta%20%7By_l%7D%5D%20%3D%20%7B1%20%5Cover%202%7DVar%5B%5CDelta%20%7Bx_%7Bl%20&plus;%201%7D%7D%5D%24%24)...................................................(8)
+- 根据`(7)`可以得到：              
+![enter description here][26]
+- 将`L`层展开得：        
+![$$Var[\Delta {x_2}] = Var[\Delta {x_{L + 1}}]\prod\limits_{l = 2}^L {{1 \over 2}\widehat {{n_l}}Var[{w_l}]} $$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24Var%5B%5CDelta%20%7Bx_2%7D%5D%20%3D%20Var%5B%5CDelta%20%7Bx_%7BL%20&plus;%201%7D%7D%5D%5Cprod%5Climits_%7Bl%20%3D%202%7D%5EL%20%7B%7B1%20%5Cover%202%7D%5Cwidehat%20%7B%7Bn_l%7D%7DVar%5B%7Bw_l%7D%5D%7D%20%24%24)...........................................................(9)
+- 同样令：![$${1 \over 2}\widehat {{n_l}}Var[{w_l}] = 1$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%7B1%20%5Cover%202%7D%5Cwidehat%20%7B%7Bn_l%7D%7DVar%5B%7Bw_l%7D%5D%20%3D%201%24%24)
+ - 注意这里：![$$\widehat {{n_l}} = k_l^2{d_l}$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%5Cwidehat%20%7B%7Bn_l%7D%7D%20%3D%20k_l%5E2%7Bd_l%7D%24%24)，而![$${n_l} = k_l^2{c_l} = k_l^2{d_{l - 1}}$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%7Bn_l%7D%20%3D%20k_l%5E2%7Bc_l%7D%20%3D%20k_l%5E2%7Bd_%7Bl%20-%201%7D%7D%24%24)
+
+- 所以![$${{\rm{w}}_l}$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%7B%7B%5Crm%7Bw%7D%7D_l%7D%24%24)应满足**均值为0**，**标准差**为：![$$\sqrt {{2 \over {\widehat {{n_l}}}}} $$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%5Csqrt%20%7B%7B2%20%5Cover%20%7B%5Cwidehat%20%7B%7Bn_l%7D%7D%7D%7D%7D%20%24%24)的分布
+
+### 4、正向和反向传播讨论、实验和**PReLu**函数
+- 对于**正向和反向**两种初始化权重的方式都是可以的，论文中的模型都能够**收敛**
+- 比如利用**反向传播**得到的初始化得到：![$$\prod\limits_{l = 2}^L {{1 \over 2}\widehat {{n_l}}Var[{w_l}]}  = 1$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%5Cprod%5Climits_%7Bl%20%3D%202%7D%5EL%20%7B%7B1%20%5Cover%202%7D%5Cwidehat%20%7B%7Bn_l%7D%7DVar%5B%7Bw_l%7D%5D%7D%20%3D%201%24%24)
+- 对应到**正向传播**中得到：    
+![enter description here][27]
+
+- 所以也不是逐渐缩小的
+- 实验给出了与**第一篇论文**的比较，如下图所示，当神经网络有30层时，**Xavier初始化权重**的方法（第一篇论文中的方法）已经不能收敛。     
+![enter description here][28]
+- 对于**PReLu激励函数**可以得到：![$${1 \over 2}(1 + {a^2}){n_l}Var[{w_l}] = 1$$](http://latex.codecogs.com/gif.latex?%5Cfn_cm%20%24%24%7B1%20%5Cover%202%7D%281%20&plus;%20%7Ba%5E2%7D%29%7Bn_l%7DVar%5B%7Bw_l%7D%5D%20%3D%201%24%24)
+ - 当`a=0`时就是对应的**ReLu激励函数**
+ - 当`a=1`是就是对应**线性函数**
+
+
+---------------------------------------------------------------------
+
+## 四、Batch Normalization（BN）批标准化
+### 1、概述
+### 2、`BN`思路
+### 3、`BN`网络的训练和推断
+### 4、实验
+
 
 
 
@@ -325,3 +368,6 @@
   [23]: ./images/Weights_initialization_07.png "Weights_initialization_07.png"
   [24]: ./images/Weights_initialization_08.png "Weights_initialization_08.png"
   [25]: ./images/Weights_initialization_09.png "Weights_initialization_09.png"
+  [26]: ./images/Weights_initialization_10.png "Weights_initialization_10.png"
+  [27]: ./images/Weights_initialization_11.png "Weights_initialization_11.png"
+  [28]: ./images/Weights_initialization_12.png "Weights_initialization_12.png"
