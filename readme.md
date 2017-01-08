@@ -311,10 +311,14 @@
 ---------------------------------------------------------------------
 
 ## 四、Batch Normalization（BN）批标准化
-### 1、概述
-### 2、`BN`思路
-### 3、`BN`网络的训练和推断
-### 4、实验
+### 1、说明
+- 参考论文：http://jmlr.org/proceedings/papers/v37/ioffe15.pdf
+- 或者查看[这里](https://github.com/lawlite19/DeepLearning_Python/blob/master/paper/Delving%20Deep%20into%20Rectifiers%20Surpassing%20Human-Level%20Performance%20on%20ImageNet%20Classification%EF%BC%88S%E5%9E%8B%E5%87%BD%E6%95%B0%E6%9D%83%E9%87%8D%E5%88%9D%E5%A7%8B%E5%8C%96%EF%BC%89.pdf)，我放在github上了：https://github.com/lawlite19/DeepLearning_Python/blob/master/paper/Delving%20Deep%20into%20Rectifiers%20Surpassing%20Human-Level%20Performance%20on%20ImageNet%20Classification%EF%BC%88S%E5%9E%8B%E5%87%BD%E6%95%B0%E6%9D%83%E9%87%8D%E5%88%9D%E5%A7%8B%E5%8C%96%EF%BC%89.pdf
+
+### 2、论文概述
+### 3、`BN`思路
+### 4、`BN`网络的训练和推断
+### 5、实验
 
 
 
