@@ -316,22 +316,77 @@
 - 或者查看[这里](https://github.com/lawlite19/DeepLearning_Python/blob/master/paper/%EF%BC%88BN%EF%BC%89Batch%20Normalization%20Accelerating%20Deep%20Network%20Training%20by%20Reducing%20Internal%20Covariate%20Shift.pdf)，我放在github上了：https://github.com/lawlite19/DeepLearning_Python/blob/master/paper/%EF%BC%88BN%EF%BC%89Batch%20Normalization%20Accelerating%20Deep%20Network%20Training%20by%20Reducing%20Internal%20Covariate%20Shift.pdf
 
 ### 2、论文概述
+- 2015年Google提出的Batch Normalization
+- 训练深层的神经网络很复杂，因为训练时每一层输入的分布在变化，导致训练过程中的饱和，称这种现象为：`internal covariate shift`
+- 需要降低**学习率Learning Rate**和注意**参数的初始化**
+- 论文中提出的方法是对于每一个小的训练batch都进行**标准化（正态化）**
+ - 允许使用较大的学习率
+ - 不必太关心初始化的问题
+ - 同时一些例子中不需要使用`Dropout`方法避免过拟合
+ - 此方法在`ImageNet classification`比赛中获得`4.82% top-5`的测试错误率
+
 ### 3、`BN`思路
+- 如果输入数据是**白化**的（whitened），网络会更快的**收敛**
+ - 白化**目的**是降低数据的冗余性和特征的相关性，例如通过**线性变换**使数据为**0均值**和**单位方差**
+
+- **并非直接标准化每一层**那么简单，如果不考虑归一化的影响，可能会降低梯度下降的影响
+- 标准化与某个样本和所有样本都有关系
+ - 解决上面的问题，我们希望对于任何参数值，都要满足想要的分布；
+ - ![$$\widehat x{\rm{ = }}N{\rm{orm}}({\rm{x}},\chi )$$](http://latex.codecogs.com/gif.latex?%24%24%5Cwidehat%20x%7B%5Crm%7B%20%3D%20%7D%7DN%7B%5Crm%7Borm%7D%7D%28%7B%5Crm%7Bx%7D%7D%2C%5Cchi%20%29%24%24)
+ - 对于反向传播，需要计算:![$${{\partial N{\rm{orm}}({\rm{x}},\chi )} \over {\partial {\rm{x}}}}$$](http://latex.codecogs.com/gif.latex?%24%24%7B%7B%5Cpartial%20N%7B%5Crm%7Borm%7D%7D%28%7B%5Crm%7Bx%7D%7D%2C%5Cchi%20%29%7D%20%5Cover%20%7B%5Cpartial%20%7B%5Crm%7Bx%7D%7D%7D%7D%24%24)和![$${{\partial N{\rm{orm}}({\rm{x}},\chi )} \over {\partial \chi }}$$](http://latex.codecogs.com/gif.latex?%24%24%7B%7B%5Cpartial%20N%7B%5Crm%7Borm%7D%7D%28%7B%5Crm%7Bx%7D%7D%2C%5Cchi%20%29%7D%20%5Cover%20%7B%5Cpartial%20%5Cchi%20%7D%7D%24%24)
+ - 这样做的**计算代价**是非常大的，因为需要计算x的**协方差矩阵** 
+ - 然后**白化**操作：![$${{{\rm{x}} - E[{\rm{x}}]} \over {\sqrt {Cov[{\rm{x}}]} }}$$](http://latex.codecogs.com/gif.latex?%24%24%7B%7B%7B%5Crm%7Bx%7D%7D%20-%20E%5B%7B%5Crm%7Bx%7D%7D%5D%7D%20%5Cover%20%7B%5Csqrt%20%7BCov%5B%7B%5Crm%7Bx%7D%7D%5D%7D%20%7D%7D%24%24)
+- 上面两种都不行或是不好，进而得到了**BN**的方法
+- 既然**白化每一层**的**输入代价非常大**，我们可以进行简化
+- 简化1
+ - 标准化特征的**每一个维度**而不是去标准化**所有的特征**，这样就不用求**协方差矩阵**了
+ - 例如`d`维的输入：![$${\rm{x}} = ({x^{(1)}},{x^{(2)}}, \cdots ,{x^{(d)}})$$](http://latex.codecogs.com/gif.latex?%24%24%7B%5Crm%7Bx%7D%7D%20%3D%20%28%7Bx%5E%7B%281%29%7D%7D%2C%7Bx%5E%7B%282%29%7D%7D%2C%20%5Ccdots%20%2C%7Bx%5E%7B%28d%29%7D%7D%29%24%24)
+ - 标准化操作：           
+ ![$${\widehat x^{(k)}} = {{{x^{(k)}} - E[{x^{(k)}}]} \over {\sqrt {Var[{{\rm{x}}^{(k)}}]} }}$$](http://latex.codecogs.com/gif.latex?%24%24%7B%5Cwidehat%20x%5E%7B%28k%29%7D%7D%20%3D%20%7B%7B%7Bx%5E%7B%28k%29%7D%7D%20-%20E%5B%7Bx%5E%7B%28k%29%7D%7D%5D%7D%20%5Cover%20%7B%5Csqrt%20%7BVar%5B%7B%7B%5Crm%7Bx%7D%7D%5E%7B%28k%29%7D%7D%5D%7D%20%7D%7D%24%24)
+ - 需要注意的是标准化操作可能会**降低数据的表达能力**,例如我们之前提到的**Sigmoid函数**：              
+ ![enter description here][29]
+ - 标准化之后**均值为0**，**方差为1**，数据就会落在**近似线性**的函数区域内，这样激活函数的意义就不明显
+ - 所以对于每个 ，对应一对**参数**：![$${\gamma ^{(k)}},{\beta ^{(k)}}$$](http://latex.codecogs.com/gif.latex?%24%24%7B%5Cgamma%20%5E%7B%28k%29%7D%7D%2C%7B%5Cbeta%20%5E%7B%28k%29%7D%7D%24%24) ，然后令：![$${y^{(k)}} = {\gamma ^{(k)}}{\widehat x^{(k)}} + {\beta ^{(k)}}$$](http://latex.codecogs.com/gif.latex?%24%24%7By%5E%7B%28k%29%7D%7D%20%3D%20%7B%5Cgamma%20%5E%7B%28k%29%7D%7D%7B%5Cwidehat%20x%5E%7B%28k%29%7D%7D%20&plus;%20%7B%5Cbeta%20%5E%7B%28k%29%7D%7D%24%24)
+ - 从式子来看就是对标准化的数据进行**缩放和平移**，不至于使数据落在线性区域内，增加数据的表达能力（式子中如果：![$${\gamma ^{(k)}} = \sqrt {Var[{{\rm{x}}^{(k)}}]} $$](http://latex.codecogs.com/gif.latex?%24%24%7B%5Cgamma%20%5E%7B%28k%29%7D%7D%20%3D%20%5Csqrt%20%7BVar%5B%7B%7B%5Crm%7Bx%7D%7D%5E%7B%28k%29%7D%7D%5D%7D%20%24%24)，![$${\beta ^{(k)}} = E[{x^{(k)}}]$$](http://latex.codecogs.com/gif.latex?%24%24%7B%5Cbeta%20%5E%7B%28k%29%7D%7D%20%3D%20E%5B%7Bx%5E%7B%28k%29%7D%7D%5D%24%24) ，就会使**恢复到原来的值**了）
+ - 但是这里还是使用的**全部的数据集**，但是如果使用**随机梯度下降**，可以选取一个**batch**进行训练
+- 简化2
+ - 第二种简化就是使用`mini-batch`进行`随机梯度下降`
+ - 注意这里使用`mini-batch`也是标准化**每一个维度**上的特征，而不是所有的特征一起，因为若果`mini-batch`中的数据量小于特征的维度时，会产生**奇异协方差矩阵**， 对应的**行列式**的值为0，非满秩
+ - 假设mini-batch 大小为`m`的`B`
+ - ![$$B = \{ {x_{1 \ldots m}}\} $$](http://latex.codecogs.com/gif.latex?%24%24B%20%3D%20%5C%7B%20%7Bx_%7B1%20%5Cldots%20m%7D%7D%5C%7D%20%24%24)，对应的变换操作为：![$$B{N_{\gamma ,\beta }}:{x_{1 \ldots m}} \to {y_{1 \ldots m}}$$](http://latex.codecogs.com/gif.latex?%24%24B%7BN_%7B%5Cgamma%20%2C%5Cbeta%20%7D%7D%3A%7Bx_%7B1%20%5Cldots%20m%7D%7D%20%5Cto%20%7By_%7B1%20%5Cldots%20m%7D%7D%24%24)
+ - 作者给出的批标准化的算法如下：
+ ![enter description here][30]
+ - 算法中的`ε`是一个**常量**，为了保证数值的稳定性
+
+- 反向传播求梯度：
+ - 因为：![$${y^{(k)}} = {\gamma ^{(k)}}{\widehat x^{(k)}} + {\beta ^{(k)}}$$](http://latex.codecogs.com/gif.latex?%24%24%7By%5E%7B%28k%29%7D%7D%20%3D%20%7B%5Cgamma%20%5E%7B%28k%29%7D%7D%7B%5Cwidehat%20x%5E%7B%28k%29%7D%7D%20&plus;%20%7B%5Cbeta%20%5E%7B%28k%29%7D%7D%24%24)
+ - 所以：![$${{\partial l} \over {\partial {{\widehat x}_i}}} = {{\partial l} \over {\partial {y_i}}}\gamma $$](http://latex.codecogs.com/gif.latex?%24%24%7B%7B%5Cpartial%20l%7D%20%5Cover%20%7B%5Cpartial%20%7B%7B%5Cwidehat%20x%7D_i%7D%7D%7D%20%3D%20%7B%7B%5Cpartial%20l%7D%20%5Cover%20%7B%5Cpartial%20%7By_i%7D%7D%7D%5Cgamma%20%24%24)
+ - 因为：![$${\widehat x_i} = {{{x_i} - {\mu _B}} \over {\sqrt {\sigma _B^2 + \varepsilon } }}$$](http://latex.codecogs.com/gif.latex?%24%24%7B%5Cwidehat%20x_i%7D%20%3D%20%7B%7B%7Bx_i%7D%20-%20%7B%5Cmu%20_B%7D%7D%20%5Cover%20%7B%5Csqrt%20%7B%5Csigma%20_B%5E2%20&plus;%20%5Cvarepsilon%20%7D%20%7D%7D%24%24)
+ - 所以：![$${{\partial l} \over {\partial \sigma _B^2}} = {\sum\limits_{i = 1}^m {{{\partial l} \over {\partial {{\widehat x}_i}}}({x_i} - {u_B}){{ - 1} \over 2}(\sigma _B^2 + \varepsilon )} ^{ - {3 \over 2}}}$$](http://latex.codecogs.com/gif.latex?%24%24%7B%7B%5Cpartial%20l%7D%20%5Cover%20%7B%5Cpartial%20%5Csigma%20_B%5E2%7D%7D%20%3D%20%7B%5Csum%5Climits_%7Bi%20%3D%201%7D%5Em%20%7B%7B%7B%5Cpartial%20l%7D%20%5Cover%20%7B%5Cpartial%20%7B%7B%5Cwidehat%20x%7D_i%7D%7D%7D%28%7Bx_i%7D%20-%20%7Bu_B%7D%29%7B%7B%20-%201%7D%20%5Cover%202%7D%28%5Csigma%20_B%5E2%20&plus;%20%5Cvarepsilon%20%29%7D%20%5E%7B%20-%20%7B3%20%5Cover%202%7D%7D%7D%24%24)
+ - ![$${{\partial l} \over {\partial {u_B}}} = \sum\limits_{{\rm{i = 1}}}^m {{{\partial l} \over {\partial {{\widehat x}_i}}}} {{ - 1} \over {\sqrt {\sigma _B^2 + \varepsilon } }}$$](http://latex.codecogs.com/gif.latex?%24%24%7B%7B%5Cpartial%20l%7D%20%5Cover%20%7B%5Cpartial%20%7Bu_B%7D%7D%7D%20%3D%20%5Csum%5Climits_%7B%7B%5Crm%7Bi%20%3D%201%7D%7D%7D%5Em%20%7B%7B%7B%5Cpartial%20l%7D%20%5Cover%20%7B%5Cpartial%20%7B%7B%5Cwidehat%20x%7D_i%7D%7D%7D%7D%20%7B%7B%20-%201%7D%20%5Cover%20%7B%5Csqrt%20%7B%5Csigma%20_B%5E2%20&plus;%20%5Cvarepsilon%20%7D%20%7D%7D%24%24)
+ - 因为：![$${\mu _B} = {1 \over m}\sum\limits_{i = 1}^m {{x_i}} $$](http://latex.codecogs.com/gif.latex?%24%24%7B%5Cmu%20_B%7D%20%3D%20%7B1%20%5Cover%20m%7D%5Csum%5Climits_%7Bi%20%3D%201%7D%5Em%20%7B%7Bx_i%7D%7D%20%24%24)和![$$\sigma _B^2 = {1 \over m}\sum\limits_{i = 1}^m {({x_i}}  - {\mu _B}{)^2}$$](http://latex.codecogs.com/gif.latex?%24%24%5Csigma%20_B%5E2%20%3D%20%7B1%20%5Cover%20m%7D%5Csum%5Climits_%7Bi%20%3D%201%7D%5Em%20%7B%28%7Bx_i%7D%7D%20-%20%7B%5Cmu%20_B%7D%7B%29%5E2%7D%24%24)
+ - 所以：![$${{\partial l} \over {\partial {x_i}}} = {{\partial l} \over {\partial {{\widehat x}_i}}}{1 \over {\sqrt {\sigma _B^2 + \varepsilon } }} + {{\partial l} \over {\partial \sigma _B^2}}{{2({x_i} - {\mu _B})} \over m} + {{\partial l} \over {\partial {u_B}}}{1 \over m}$$](http://latex.codecogs.com/gif.latex?%24%24%7B%7B%5Cpartial%20l%7D%20%5Cover%20%7B%5Cpartial%20%7Bx_i%7D%7D%7D%20%3D%20%7B%7B%5Cpartial%20l%7D%20%5Cover%20%7B%5Cpartial%20%7B%7B%5Cwidehat%20x%7D_i%7D%7D%7D%7B1%20%5Cover%20%7B%5Csqrt%20%7B%5Csigma%20_B%5E2%20&plus;%20%5Cvarepsilon%20%7D%20%7D%7D%20&plus;%20%7B%7B%5Cpartial%20l%7D%20%5Cover%20%7B%5Cpartial%20%5Csigma%20_B%5E2%7D%7D%7B%7B2%28%7Bx_i%7D%20-%20%7B%5Cmu%20_B%7D%29%7D%20%5Cover%20m%7D%20&plus;%20%7B%7B%5Cpartial%20l%7D%20%5Cover%20%7B%5Cpartial%20%7Bu_B%7D%7D%7D%7B1%20%5Cover%20m%7D%24%24)
+ - 所以：![$${{\partial l} \over {\partial \gamma }} = \sum\limits_{i = 1}^m {{{\partial l} \over {\partial {y_i}}}} {\widehat x_i}$$](http://latex.codecogs.com/gif.latex?%24%24%7B%7B%5Cpartial%20l%7D%20%5Cover%20%7B%5Cpartial%20%5Cgamma%20%7D%7D%20%3D%20%5Csum%5Climits_%7Bi%20%3D%201%7D%5Em%20%7B%7B%7B%5Cpartial%20l%7D%20%5Cover%20%7B%5Cpartial%20%7By_i%7D%7D%7D%7D%20%7B%5Cwidehat%20x_i%7D%24%24)
+ - ![$${{\partial l} \over {\partial \beta }} = \sum\limits_{i = 1}^m {{{\partial l} \over {\partial {y_i}}}} $$](http://latex.codecogs.com/gif.latex?%24%24%7B%7B%5Cpartial%20l%7D%20%5Cover%20%7B%5Cpartial%20%5Cbeta%20%7D%7D%20%3D%20%5Csum%5Climits_%7Bi%20%3D%201%7D%5Em%20%7B%7B%7B%5Cpartial%20l%7D%20%5Cover%20%7B%5Cpartial%20%7By_i%7D%7D%7D%7D%20%24%24)
+- 对于**BN变换**是**可微分**的，随着网络的训练，网络层可以持续学到输入的分布。
+
 ### 4、`BN`网络的训练和推断
+- 按照BN方法，输入数据`x`会经过变化得到`BN（x）`，然后可以通过**随机梯度下降**进行训练，标准化是在mini-batch上所以是非常高效的。
+- 但是对于推断我们希望输出只取决于输入，而对于输入**只有一个实例数据**，无法得到`mini-batch`的其他实例，就**无法求对应的均值和方差**了。
+- 可以通过从所有**训练实例中获得的统计量**来**代替**mini-batch中m个训练实例获得统计量均值和方差
+- 我们对每个`mini-batch`做标准化，可以对记住每个`mini-batch`的B，然后得到**全局统计量**
+- ![$$E[x] \leftarrow {E_B}[{\mu _B}]$$](http://latex.codecogs.com/gif.latex?%24%24E%5Bx%5D%20%5Cleftarrow%20%7BE_B%7D%5B%7B%5Cmu%20_B%7D%5D%24%24)
+- ![$$Var[x] \leftarrow {m \over {m - 1}}{E_B}[\sigma _B^2]$$](http://latex.codecogs.com/gif.latex?%24%24Var%5Bx%5D%20%5Cleftarrow%20%7Bm%20%5Cover%20%7Bm%20-%201%7D%7D%7BE_B%7D%5B%5Csigma%20_B%5E2%5D%24%24)（这里方差采用的是**无偏**方差估计）
+- 所以**推断**采用`BN`的方式为：
+ - ![$$\eqalign{
+  & y = \gamma {{x - E(x)} \over {\sqrt {Var[x] + \varepsilon } }} + \beta   \cr 
+  & {\kern 1pt} {\kern 1pt} {\kern 1pt} {\kern 1pt} {\kern 1pt} {\kern 1pt} {\kern 1pt} {\kern 1pt} {\kern 1pt}  = {\gamma  \over {\sqrt {Var[x] + \varepsilon } }}x + (\beta  - {{\gamma E[x]} \over {\sqrt {Var[x] + \varepsilon } }}) \cr} $$](http://latex.codecogs.com/gif.latex?%24%24%5Ceqalign%7B%20%26%20y%20%3D%20%5Cgamma%20%7B%7Bx%20-%20E%28x%29%7D%20%5Cover%20%7B%5Csqrt%20%7BVar%5Bx%5D%20&plus;%20%5Cvarepsilon%20%7D%20%7D%7D%20&plus;%20%5Cbeta%20%5Ccr%20%26%20%7B%5Ckern%201pt%7D%20%7B%5Ckern%201pt%7D%20%7B%5Ckern%201pt%7D%20%7B%5Ckern%201pt%7D%20%7B%5Ckern%201pt%7D%20%7B%5Ckern%201pt%7D%20%7B%5Ckern%201pt%7D%20%7B%5Ckern%201pt%7D%20%7B%5Ckern%201pt%7D%20%3D%20%7B%5Cgamma%20%5Cover%20%7B%5Csqrt%20%7BVar%5Bx%5D%20&plus;%20%5Cvarepsilon%20%7D%20%7D%7Dx%20&plus;%20%28%5Cbeta%20-%20%7B%7B%5Cgamma%20E%5Bx%5D%7D%20%5Cover%20%7B%5Csqrt%20%7BVar%5Bx%5D%20&plus;%20%5Cvarepsilon%20%7D%20%7D%7D%29%20%5Ccr%7D%20%24%24)
+- 作者给出的完整算法：                
+![enter description here][31]
+
 ### 5、实验
-
-
-
-
-
-
-
-
-
-
-
-
-
+- 最后给出的实验可以看出使用BN的方式训练**精准度**很高而且很**稳定**。
+![enter description here][32]
 
 
 
@@ -380,3 +435,7 @@
   [26]: ./images/Weights_initialization_10.png "Weights_initialization_10.png"
   [27]: ./images/Weights_initialization_11.png "Weights_initialization_11.png"
   [28]: ./images/Weights_initialization_12.png "Weights_initialization_12.png"
+  [29]: ./images/Weights_initialization_01.png "Weights_initialization_01.png"
+  [30]: ./images/BN_01.png "BN_01.png"
+  [31]: ./images/BN_02.png "BN_02.png"
+  [32]: ./images/BN_03.png "BN_03.png"
