@@ -354,7 +354,7 @@
  - 注意这里使用`mini-batch`也是标准化**每一个维度**上的特征，而不是所有的特征一起，因为若果`mini-batch`中的数据量小于特征的维度时，会产生**奇异协方差矩阵**， 对应的**行列式**的值为0，非满秩
  - 假设mini-batch 大小为`m`的`B`
  - ![$$B = \{ {x_{1 \ldots m}}\} $$](http://latex.codecogs.com/gif.latex?%24%24B%20%3D%20%5C%7B%20%7Bx_%7B1%20%5Cldots%20m%7D%7D%5C%7D%20%24%24)，对应的变换操作为：![$$B{N_{\gamma ,\beta }}:{x_{1 \ldots m}} \to {y_{1 \ldots m}}$$](http://latex.codecogs.com/gif.latex?%24%24B%7BN_%7B%5Cgamma%20%2C%5Cbeta%20%7D%7D%3A%7Bx_%7B1%20%5Cldots%20m%7D%7D%20%5Cto%20%7By_%7B1%20%5Cldots%20m%7D%7D%24%24)
- - 作者给出的批标准化的算法如下：
+ - 作者给出的批标准化的算法如下：               
  ![enter description here][30]
  - 算法中的`ε`是一个**常量**，为了保证数值的稳定性
 
