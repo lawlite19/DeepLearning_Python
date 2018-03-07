@@ -392,11 +392,11 @@
 
 
 ## 五、RNN和LSTM_01基础
-- 由于 `github` 中不支持 `Mathjax` 公式，查看请移步[我的博客](http://lawlite.me/2017/06/14/RNN-%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C-01/)
+- 由于 `github` 中不支持 `Mathjax` 公式，查看请移步[我的博客](http://lawlite.me/2017/06/14/RNN-%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%92%8CLSTM-01%E5%9F%BA%E7%A1%80/)
 
-- Tensorflow中实现一个例子：[查看这里](http://lawlite.me/2017/06/16/RNN-%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C-02Tensorflow%E4%B8%AD%E7%9A%84%E5%AE%9E%E7%8E%B0/)
+- Tensorflow中实现一个`Binary`例子：[查看这里](http://lawlite.me/2017/06/14/RNN-%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%92%8CLSTM-01%E5%9F%BA%E7%A1%80/)
 
-
+- Tensorflow中的进阶实现：[查看这里][33]
 
 
 
@@ -443,3 +443,4 @@
   [30]: ./images/BN_01.png "BN_01.png"
   [31]: ./images/BN_02.png "BN_02.png"
   [32]: ./images/BN_03.png "BN_03.png"
+  [33]: http://lawlite.me/2017/06/21/RNN-LSTM%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C-03Tensorflow%E8%BF%9B%E9%98%B6%E5%AE%9E%E7%8E%B0/
